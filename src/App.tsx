@@ -20,9 +20,6 @@ const App: React.FC = () => {
         <Detail path="/movie/:nadSheetDraftId" />
         <Search path="/search" />
       </Router>
-      {/* <Route overview> */}
-      {/* <Route detail> */}
-      {/* <Route search> */}
     </div>
   );
 };

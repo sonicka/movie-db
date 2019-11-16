@@ -1,21 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { OverviewGroup } from "./overview-group";
 import { useStyles } from "./overview-styles";
+import { fetchPopular, fetchFromCategory } from "../../fetchData";
 
-/// func fetchCategory => array of movie objects => func format objects to IMovie format => array of formatted
-/// func createMovieList = map of ' category title : array of movies ' tuples
+// todo use Redux to store fetched data
 
 const Overview: React.FC<RouteComponentProps> = props => {
   const classes = useStyles(props);
+  const [popularMovies, setPopularMovies] = useState([]);
+  const [popularSeries, setPopularSeries] = useState([]);
+  const [familyMovies, setFamilyMovies] = useState([]);
+  const [documentaryMovies, setDocumentaryMovies] = useState([]);
+
+  useEffect(() => {
+    fetchPopular("movie", setPopularMovies);
+    fetchPopular("tv", setPopularSeries);
+    fetchFromCategory("family", setFamilyMovies);
+    fetchFromCategory("documentary", setDocumentaryMovies);
+  }, []);
 
   return (
-    // forEach tuple in movieList return OverviewGroup with props groupTitle=key and movies=value
     <div className={classes.overview}>
-      <OverviewGroup />
-      <OverviewGroup />
-      <OverviewGroup />
-      <OverviewGroup />
+      <OverviewGroup groupTitle="Popular Movies" movies={popularMovies} />
+      <OverviewGroup groupTitle="Popular Series" movies={popularSeries} />
+      <OverviewGroup groupTitle="Family Movies" movies={familyMovies} />
+      <OverviewGroup groupTitle="Documentaries" movies={documentaryMovies} />
     </div>
   );
 };

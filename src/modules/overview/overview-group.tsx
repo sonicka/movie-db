@@ -11,10 +11,10 @@ interface IMovie {
 
 interface IOverviewGroup {
   groupTitle: string;
-  movies: IMovie[];
+  movies: any[];
 }
 
-export const OverviewGroup: React.FC = props => {
+export const OverviewGroup: React.FC<IOverviewGroup> = props => {
   const classes = useStyles(props);
 
   const settings = {
@@ -52,33 +52,17 @@ export const OverviewGroup: React.FC = props => {
     ]
   };
 
-  const movies = [
-    {
-      src: "http://placekitten.com/g/400/200",
-      title: "title"
-    },
-    {
-      src: "http://placekitten.com/g/400/200",
-      title: "title"
-    },
-    {
-      src: "http://placekitten.com/g/400/200",
-      title: "title"
-    },
-    {
-      src: "http://placekitten.com/g/400/200",
-      title: "title"
-    }
-  ];
-
   return (
     <div className={classes.overviewGroup}>
-      <h3>Category</h3>
+      <h3>{props.groupTitle}</h3>
       <Slider {...settings}>
-        {movies.map(movie => (
+        {props.movies.map(movie => (
           <div>
-            <img src={movie.src} alt={movie.title} />
-            <p>lol</p>
+            <img
+              src={`http://image.tmdb.org/t/p/w185${movie.poster_path}`}
+              alt={movie.title}
+            />
+            <p>{movie.title}</p>
           </div>
         ))}
       </Slider>
