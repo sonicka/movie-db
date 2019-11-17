@@ -1,33 +1,45 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { OverviewGroup } from "./overview-group";
 import { useStyles } from "./overview-styles";
-import { fetchPopular, fetchFromCategory } from "../../fetchData";
+import { foo, saveSomeData } from "../../appActions";
+import { connect } from "react-redux";
+import { store } from "../../store";
 
-// todo use Redux to store fetched data
-
-const Overview: React.FC<RouteComponentProps> = props => {
+const Overview: React.FC<RouteComponentProps & any> = props => {
   const classes = useStyles(props);
-  const [popularMovies, setPopularMovies] = useState([]);
-  const [popularSeries, setPopularSeries] = useState([]);
-  const [familyMovies, setFamilyMovies] = useState([]);
-  const [documentaryMovies, setDocumentaryMovies] = useState([]);
 
   useEffect(() => {
-    fetchPopular("movie", setPopularMovies);
-    fetchPopular("tv", setPopularSeries);
-    fetchFromCategory("family", setFamilyMovies);
-    fetchFromCategory("documentary", setDocumentaryMovies);
+    props.dispatch(foo());
+    props.dispatch(saveSomeData("popular_movies"));
+    props.dispatch(saveSomeData("popular_series"));
+    props.dispatch(saveSomeData("family_movies"));
+    props.dispatch(saveSomeData("documentaries"));
   }, []);
+
+  console.log(store.getState()); // todo
 
   return (
     <div className={classes.overview}>
-      <OverviewGroup groupTitle="Popular Movies" movies={popularMovies} />
+      {/* <OverviewGroup groupTitle="Popular Movies" movies={popularMovies} />
       <OverviewGroup groupTitle="Popular Series" movies={popularSeries} />
       <OverviewGroup groupTitle="Family Movies" movies={familyMovies} />
-      <OverviewGroup groupTitle="Documentaries" movies={documentaryMovies} />
+      <OverviewGroup groupTitle="documentaries" movies={documentaryMovies} /> */}
     </div>
   );
 };
 
-export default Overview;
+interface IState {
+  foobar: string;
+  loading: boolean;
+  data: any;
+  [key: string]: any;
+}
+
+const mapStateToProps = (state: IState) => ({
+  foobar: state.foobar,
+  loading: state.loading,
+  data: state.data // todo!
+});
+
+export default connect(mapStateToProps)(Overview);

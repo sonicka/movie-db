@@ -1,8 +1,10 @@
 import React from "react";
+import { navigate, Link } from "@reach/router";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import { useStyles } from "./overview-styles";
+import { fetchDetail } from "../../fetchData";
 
 interface IMovie {
   title: string;
@@ -57,13 +59,15 @@ export const OverviewGroup: React.FC<IOverviewGroup> = props => {
       <h3>{props.groupTitle}</h3>
       <Slider {...settings}>
         {props.movies.map(movie => (
-          <div>
-            <img
-              src={`http://image.tmdb.org/t/p/w185${movie.poster_path}`}
-              alt={movie.title}
-            />
-            <p>{movie.title}</p>
-          </div>
+          <Link to={`/title/${movie.id}`}>
+            <div key={movie.id}>
+              <img
+                src={`http://image.tmdb.org/t/p/w185${movie.poster_path}`}
+                alt={movie.title}
+              />
+              <p>{movie.title}</p>
+            </div>
+          </Link>
         ))}
       </Slider>
     </div>

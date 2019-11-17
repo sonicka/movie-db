@@ -6,39 +6,37 @@ const baseUrl = "https://api.themoviedb.org";
 type CATEGORY = "movie" | "tv";
 type GENRE = "family" | "documentary";
 
-export const fetchPopular = (category: CATEGORY, setRes: any): any => {
-  axios
+export const fetchPopular = (category: CATEGORY): any => {
+  return axios
     .get(`${baseUrl}/3/${category}/popular?api_key=${apiKey}`, {})
     .then(function(response) {
       // handle success
-      setRes(response.data.results);
-      return response.data;
+      return response.data.results;
     })
     .catch(function(error) {
       // handle error
-      console.log(error);
+      throw error;
     })
     .finally(function() {
       // always executed
     });
 };
 
-export const fetchFromCategory = (genre: GENRE, setRes: any): any => {
+export const fetchFromCategory = (genre: GENRE): any => {
   let genreId = genre === "family" ? "10751" : "99";
 
-  axios
+  return axios
     .get(
       `${baseUrl}/3/discover/movie?api_key=${apiKey}&with_genres=${genreId}`,
       {}
     )
     .then(function(response) {
       // handle success
-      setRes(response.data.results);
-      return response.data;
+      return response.data.results;
     })
     .catch(function(error) {
       // handle error
-      console.log(error);
+      throw error;
     })
     .finally(function() {
       // always executed
@@ -46,13 +44,27 @@ export const fetchFromCategory = (genre: GENRE, setRes: any): any => {
 };
 
 // todo
-export const fetchMovie = (category: string): {} => {
-  let fetchedMovie = {};
-  return fetchMovie;
+export const fetchDetail = (
+  category: CATEGORY,
+  id: number | undefined
+): any => {
+  return axios
+    .get(`${baseUrl}/3/${category}/${id}?api_key=${apiKey}`, {})
+    .then(function(response) {
+      // handle success
+      return response.data;
+    })
+    .catch(function(error) {
+      // handle error
+      throw error;
+    })
+    .finally(function() {
+      // always executed
+    });
 };
 
 // todo
 export const searchMovies = (query: string): {} => {
   let fetchedMovie = {};
-  return fetchMovie;
+  return fetchedMovie;
 };

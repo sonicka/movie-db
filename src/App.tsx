@@ -17,7 +17,9 @@ const App: React.FC = () => {
       <Menu />
       <Router>
         <Overview path="/" />
-        <Detail path="/movie/:nadSheetDraftId" />
+        <Detail path="/title/:titleId">
+          <Detail path="/play" /> {/* playback */}
+        </Detail>
         <Search path="/search" />
       </Router>
     </div>
