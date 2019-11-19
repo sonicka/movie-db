@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "@reach/router";
+import format from "date-fns/format";
 import { store } from "../../store";
 import { saveDetail } from "../../detailActions";
 import { get } from "lodash";
 import { useStyles } from "./detail-styles";
-import { Grid } from "@material-ui/core";
+import { Grid, useMediaQuery, Box } from "@material-ui/core";
+import { release } from "os";
 
 interface IDetailProps extends RouteComponentProps {
   titleId?: number; // todo remove ? after implementing video
@@ -14,71 +16,143 @@ interface IDetailProps extends RouteComponentProps {
 const Detail: React.FC<IDetailProps & any> = ({
   titleId,
   dispatch,
+  title = "",
+  tagline = "",
+  releaseDate = "",
+  revenue = 0,
+  budget = 0,
+  runtime = 0,
+  overview = "",
+  genres = [],
+  backdrop_path = "",
   ...props
 }) => {
-  const classes = useStyles(props);
-
-  const detail = store.getState().detail.detailData;
+  const isSmall = useMediaQuery("(max-width:601px)");
+  const isLarge = useMediaQuery("(min-width:1100px)"); // todo adjust
+  const bgImage = `http://image.tmdb.org/t/p/w1280/${backdrop_path}`;
+  const stylesProps = {
+    backgroundColor: "red",
+    bgImage: bgImage,
+    topPadding: isSmall ? "56px" : "64px",
+    contentMargin: isLarge ? "200px" : "20px"
+  };
+  const classes = useStyles(stylesProps);
 
   useEffect(() => {
-    dispatch(saveDetail("movie", titleId));
-  }, []);
+    dispatch(saveDetail("movie", titleId)); // todo
+  }, [dispatch]);
 
-  // todo zistit ako rendernut upravene data  zo stateu // ako vyvolat funkciu po nacitani dat z API
-  const getTopTitleYear = (title: string, date: string) =>
+  const formattedTitle = (title: string, date: string) =>
     title.concat(" (", date.substring(0, 4), ")");
+  const formattedRevenue = `$${revenue
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+  const formattedBudget = `$${budget
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
 
-  const bgImage = `http://image.tmdb.org/t/p/w1280/${detail.backdrop_path}`;
+  const formattedDate = (date: string) => {
+    let parsed = date.split("-");
+    if (parsed.length > 0) {
+      return format(
+        new Date(
+          parseInt(parsed[0]),
+          parseInt(parsed[1]) - 1,
+          parseInt(parsed[2])
+        ),
+        "dd MMMM yyyy"
+      );
+    }
+  };
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        width: "100vw",
-        paddingTop: "64px",
-        display: "flex",
-        backgroundImage: `url(${bgImage})`, // todo move to styles file
-        backgroundPosition: "center center",
-        backgroundRepeat: "no-repeat",
-        backgroundAttachment: "fixed",
-        backgroundSize: "cover",
-        backgroundColor: "black"
-      }}
-    >
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <h2>
-            {getTopTitleYear(
-              get(detail, "title", ""),
-              get(detail, "release_date", "")
-            )}
-          </h2>
+    <div className={classes.wrapperWrapper}>
+      <Grid container className={classes.wrapper}>
+        <Grid item xs={12} className={classes.title}>
+          <h1>{formattedTitle(title, releaseDate)}</h1>
+          <Grid item xs={12}>
+            <h2>{tagline}</h2>
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <p>{detail.overview}</p>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <b> Genres</b>
-          <ul>
-            <p>
-              {get(detail, "genres", []).map((genre: any) => (
-                <li key={genre.id}>{genre.name}</li>
+        <Grid container className={classes.content}>
+          <Grid item xs={12} md={6}>
+            <div className={classes.overviewWrapper}>
+              <p>{overview}</p>
+            </div>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <div className={classes.detailsWrapper}>
+              <div className={classes.detailItem}>
+                <div className={classes.detailItemTitle}>Released on</div>
+                <div className={classes.detailItemText}>
+                  {releaseDate.length > 0 && formattedDate(releaseDate)}
+                </div>
+              </div>
+              <div className={classes.detailItem}>
+                <div className={classes.detailItemTitle}>Runtime</div>
+                <div className={classes.detailItemText}>
+                  {`${runtime} minutes`}
+                </div>
+              </div>
+              <div className={classes.detailItem}>
+                <div className={classes.detailItemTitle}>Budget</div>
+                <div className={classes.detailItemText}>{formattedBudget}</div>
+              </div>
+              <div className={classes.detailItem}>
+                <div className={classes.detailItemTitle}>Revenue</div>
+                <div className={classes.detailItemText}>{formattedRevenue}</div>
+              </div>
+            </div>
+          </Grid>
+          <Grid item xs={12} md={12}>
+            <div className={classes.genresWrapper}>
+              {genres.map((genre: any) => (
+                <div key={genre.id} className={classes.genre}>
+                  {genre.name}
+                </div>
               ))}
-            </p>
-          </ul>
-          <b> Released on</b>
-          <p> {detail.release_date}</p>
+            </div>
+          </Grid>
         </Grid>
         <Grid item xs={12}>
-          <button>PLAY MOVIE</button>
+          <div className={classes.buttonWrapper}>
+            <button className={classes.bottomButton}>PLAY MOVIE</button>
+          </div>
         </Grid>
       </Grid>
     </div>
   );
 };
 
-const mapStateToProps = (state: any) => ({
-  state: state.detail // todo?
-});
+interface Istate {
+  detail: {
+    detailData: {
+      title: string;
+      tagline: string;
+      release_date: string;
+      revenue: string;
+      budget: string;
+      runtime: string;
+      overview: string;
+      genres: any;
+      backdrop_path: string;
+    };
+  };
+} // todo
+
+const mapStateToProps = (state: Istate, ownProps: any) => {
+  return {
+    ...ownProps,
+    title: state.detail.detailData.title,
+    tagline: state.detail.detailData.tagline,
+    releaseDate: state.detail.detailData.release_date,
+    revenue: state.detail.detailData.revenue,
+    budget: state.detail.detailData.budget,
+    runtime: state.detail.detailData.runtime,
+    overview: state.detail.detailData.overview,
+    genres: state.detail.detailData.genres,
+    backdrop_path: state.detail.detailData.backdrop_path
+  };
+};
 
 export default connect(mapStateToProps)(Detail);

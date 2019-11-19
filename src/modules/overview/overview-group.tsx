@@ -36,7 +36,7 @@ const OverviewGroup: React.FC<IOverviewGroup & any> = ({
   useEffect(() => {
     dispatch(removeDetail());
     dispatch(saveSomeData(groupId));
-  }, []);
+  }, [dispatch, groupId]);
 
   const settings = {
     dots: true,
