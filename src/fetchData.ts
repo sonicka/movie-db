@@ -3,7 +3,7 @@ import axios from "axios";
 const apiKey = "f2725be090399a7f43df4c69b352f2f3";
 const baseUrl = "https://api.themoviedb.org";
 
-type CATEGORY = "movie" | "tv";
+export type CATEGORY = "movie" | "tv";
 type GENRE = "family" | "documentary";
 
 export const fetchPopular = (category: CATEGORY): any => {
@@ -22,7 +22,7 @@ export const fetchPopular = (category: CATEGORY): any => {
     });
 };
 
-export const fetchFromCategory = (genre: GENRE): any => {
+export const fetchFromGenre = (genre: GENRE): any => {
   let genreId = genre === "family" ? "10751" : "99";
 
   return axios
@@ -44,10 +44,7 @@ export const fetchFromCategory = (genre: GENRE): any => {
 };
 
 // todo
-export const fetchDetail = (
-  category: CATEGORY,
-  id: number | undefined
-): any => {
+export const fetchDetail = (category: CATEGORY, id: number): any => {
   return axios
     .get(`${baseUrl}/3/${category}/${id}?api_key=${apiKey}`, {})
     .then(function(response) {
