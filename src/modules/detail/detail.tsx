@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { RouteComponentProps } from "@reach/router";
+import { RouteComponentProps, Link } from "@reach/router";
 import format from "date-fns/format";
-import { store } from "../../store";
 import { saveDetail } from "../../detailActions";
-import { get } from "lodash";
 import { useStyles } from "./detail-styles";
-import { Grid, useMediaQuery, Box } from "@material-ui/core";
-import { release } from "os";
+import { Grid, useMediaQuery } from "@material-ui/core";
+import { get } from "lodash";
 
 interface IDetailProps extends RouteComponentProps {
   titleId?: number; // todo remove ? after implementing video
@@ -25,8 +23,14 @@ const Detail: React.FC<IDetailProps & any> = ({
   overview = "",
   genres = [],
   backdrop_path = "",
+  videos = [],
   ...props
 }) => {
+  const vid = `https://www.youtube.com/watch?v=${get(
+    videos,
+    "results[0].key",
+    ""
+  )}`;
   const isSmall = useMediaQuery("(max-width:601px)");
   const isLarge = useMediaQuery("(min-width:1100px)"); // todo adjust
   const bgImage = `http://image.tmdb.org/t/p/w1280/${backdrop_path}`;
@@ -40,7 +44,7 @@ const Detail: React.FC<IDetailProps & any> = ({
 
   useEffect(() => {
     dispatch(saveDetail("movie", titleId)); // todo
-  }, [dispatch]);
+  }, [dispatch, titleId]);
 
   const formattedTitle = (title: string, date: string) =>
     title.concat(" (", date.substring(0, 4), ")");
@@ -116,7 +120,9 @@ const Detail: React.FC<IDetailProps & any> = ({
         </Grid>
         <Grid item xs={12}>
           <div className={classes.buttonWrapper}>
-            <button className={classes.bottomButton}>PLAY MOVIE</button>
+            <Link to={`play/`} state={{ vid: vid, bgImage: bgImage }}>
+              <button className={classes.bottomButton}>PLAY MOVIE</button>
+            </Link>
           </div>
         </Grid>
       </Grid>
@@ -136,6 +142,7 @@ interface Istate {
       overview: string;
       genres: any;
       backdrop_path: string;
+      videos: { results: any[] };
     };
   };
 } // todo
@@ -151,7 +158,8 @@ const mapStateToProps = (state: Istate, ownProps: any) => {
     runtime: state.detail.detailData.runtime,
     overview: state.detail.detailData.overview,
     genres: state.detail.detailData.genres,
-    backdrop_path: state.detail.detailData.backdrop_path
+    backdrop_path: state.detail.detailData.backdrop_path,
+    videos: state.detail.detailData.videos
   };
 };
 

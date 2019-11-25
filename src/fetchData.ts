@@ -46,7 +46,10 @@ export const fetchFromGenre = (genre: GENRE): any => {
 // todo
 export const fetchDetail = (category: CATEGORY, id: number): any => {
   return axios
-    .get(`${baseUrl}/3/${category}/${id}?api_key=${apiKey}`, {})
+    .get(
+      `${baseUrl}/3/${category}/${id}?api_key=${apiKey}&append_to_response=videos`,
+      {}
+    )
     .then(function(response) {
       // handle success
       return response.data;
