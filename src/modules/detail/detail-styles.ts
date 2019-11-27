@@ -78,6 +78,13 @@ export const useStyles = makeStyles({
     bottom: 0,
     width: "100%",
     height: "32px",
-    color: "black"
+    backgroundColor: "black",
+    color: "white",
+    border: "none",
+    borderTop: "1px solid red",
+    "&:hover": {
+      backgroundColor: "red",
+      color: "white"
+    }
   }
 });

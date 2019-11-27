@@ -6,6 +6,7 @@ import { saveDetail } from "../../detailActions";
 import { useStyles } from "./detail-styles";
 import { Grid, useMediaQuery } from "@material-ui/core";
 import { get } from "lodash";
+import { CATEGORY } from "../../fetchData";
 
 interface IDetailProps extends RouteComponentProps {
   titleId?: number; // todo remove ? after implementing video
@@ -14,6 +15,7 @@ interface IDetailProps extends RouteComponentProps {
 const Detail: React.FC<IDetailProps & any> = ({
   titleId,
   dispatch,
+  category = "", // todo
   title = "",
   tagline = "",
   releaseDate = "",
@@ -42,8 +44,10 @@ const Detail: React.FC<IDetailProps & any> = ({
   };
   const classes = useStyles(stylesProps);
 
+  console.log(category);
+
   useEffect(() => {
-    dispatch(saveDetail("movie", titleId)); // todo
+    dispatch(saveDetail(props.location.state.category, titleId)); // todo
   }, [dispatch, titleId]);
 
   const formattedTitle = (title: string, date: string) =>
@@ -68,6 +72,8 @@ const Detail: React.FC<IDetailProps & any> = ({
       );
     }
   };
+
+  // todo podla category upravit fieldy
 
   return (
     <div className={classes.wrapperWrapper}>
@@ -131,7 +137,9 @@ const Detail: React.FC<IDetailProps & any> = ({
 };
 
 interface Istate {
+  // todo determine if movie or tv show
   detail: {
+    category: CATEGORY;
     detailData: {
       title: string;
       tagline: string;
@@ -151,6 +159,7 @@ const mapStateToProps = (state: Istate, ownProps: any) => {
   return {
     ...ownProps,
     title: state.detail.detailData.title,
+    category: state.detail.category,
     tagline: state.detail.detailData.tagline,
     releaseDate: state.detail.detailData.release_date,
     revenue: state.detail.detailData.revenue,

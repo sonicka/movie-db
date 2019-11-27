@@ -22,6 +22,7 @@ export function saveDetail(type: CATEGORY, id: number) {
         type: FETCH_DETAIL_SUCCESS,
         payload: {
           id: id,
+          category: type,
           data: response
         }
       });

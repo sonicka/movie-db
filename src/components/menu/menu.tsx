@@ -10,7 +10,7 @@ const Menu: React.FC = props => {
 
   return (
     <AppBar position="fixed">
-      <Toolbar>
+      <Toolbar className={classes.toolbar}>
         <Button className={classes.menuItem} onClick={() => navigate("/")}>
           Movies
         </Button>

@@ -1,15 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
+import { connect } from "react-redux";
 import { Link } from "@reach/router";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
+import { Fab } from "@material-ui/core";
+import { get } from "lodash";
+import ItemsCarousel from "react-items-carousel";
+import { store } from "../../store";
 import { useStyles } from "./overview-styles";
 import { saveSomeData } from "../../dataActions";
-import { connect } from "react-redux";
-import { store } from "../../store";
-import { get } from "lodash";
 import { IwhichData } from "../../dataActions";
 import { removeDetail } from "../../detailActions";
+import { CATEGORY } from "../../fetchData";
+
+// pure-react-carousel"; // remove
+// import Slider from "react-slick"; // remove
+// import Carousel, { Dots } from "@brainhubeu/react-carousel"; // remove
+// import Carousel from "react-multi-carousel"; // remove
+// import Carousel from "react-responsive-carousel/lib/components/Carousel"; // remove
+// import { Image, Label } from "semantic-ui-react"; // remove
+// import "semantic-ui-css/semantic.min.css";
 
 interface IMovie {
   title: string;
@@ -19,12 +27,27 @@ interface IMovie {
 interface IOverviewGroup {
   groupTitle: string;
   groupId: IwhichData;
+  category: CATEGORY;
+}
+
+function useWindowSize() {
+  const [size, setSize] = useState([0, 0]);
+  useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener("resize", updateSize);
+    updateSize();
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+  return size;
 }
 
 const OverviewGroup: React.FC<IOverviewGroup & any> = ({
   dispatch,
   groupTitle,
   groupId,
+  category,
   ...props
 }) => {
   const classes = useStyles(props);
@@ -33,65 +56,71 @@ const OverviewGroup: React.FC<IOverviewGroup & any> = ({
   const entities = get(state, `${groupId}.entities`, []);
   const error = get(state, `${groupId}.error`);
 
+  const [activeItemIndex, setActiveItemIndex] = useState(0);
+  const [width, height] = useWindowSize();
+
   useEffect(() => {
     dispatch(removeDetail());
     dispatch(saveSomeData(groupId));
   }, [dispatch, groupId]);
 
-  const settings = {
-    dots: true,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 3,
-    initialSlide: 0,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true
-        }
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2
-        }
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1
-        }
-      }
-    ]
-  };
-
   return (
     <div className={classes.overviewGroup}>
-      <h3>{groupTitle}</h3>
-      {loading && <p>Loading...</p>}
-      {entities && (
-        <Slider {...settings}>
+      <h3 className={classes.overviewTitle}>{groupTitle}</h3>
+      {loading && <p className={classes.loading}> Loading...</p>}
+      <div
+        style={{
+          padding: "0",
+          maxWidth: "1400px",
+          minWidth: "185px",
+          margin: "auto"
+        }}
+      >
+        <ItemsCarousel
+          infiniteLoop={true}
+          gutter={Math.floor(window.innerWidth / 92)}
+          activePosition={"center"}
+          chevronWidth={60}
+          disableSwipe={false}
+          alwaysShowChevrons={false}
+          numberOfCards={
+            width < 400
+              ? Math.floor(window.innerWidth / 185)
+              : window.innerWidth / 185
+          }
+          slidesToScroll={1}
+          outsideChevron={false}
+          showSlither={false}
+          firstAndLastGutter={false}
+          activeItemIndex={activeItemIndex}
+          requestToChangeActive={(value: number) => setActiveItemIndex(value)}
+          rightChevron={
+            <Fab className={classes.fab} size="small">
+              {">"}
+            </Fab>
+          }
+          leftChevron={
+            <Fab className={classes.fab} size="small">
+              {"<"}
+            </Fab>
+          }
+        >
           {entities.map((o: any) => (
-            <div key={o.id}>
-              <Link to={`/title/${o.id}`}>
+            <div key={o.id} style={{ width: "185px" }}>
+              <Link to={`/title/${o.id}`} state={{ category: category }}>
+                {console.log(o)}
                 <img
                   src={`http://image.tmdb.org/t/p/w185${o.poster_path}`}
-                  alt={o.title}
+                  alt={category === "movie" ? o.title : o.name}
                 />
-                <p>{o.title}</p>
               </Link>
+              <p className={classes.legend}>
+                {category === "movie" ? o.title : o.name}
+              </p>
             </div>
           ))}
-        </Slider>
-      )}
+        </ItemsCarousel>
+      </div>
       {error && <i>error occured while loading data</i>}
       {/* todo error */}
     </div>

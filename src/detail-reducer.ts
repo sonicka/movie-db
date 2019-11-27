@@ -27,6 +27,7 @@ export const detailReducer = (
       return {
         ...state,
         loading: false,
+        category: action.payload.category,
         detailData: action.payload.data
       };
     case actions.FETCH_DETAIL_FAILURE:
