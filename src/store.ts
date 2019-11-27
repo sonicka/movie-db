@@ -3,11 +3,12 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
 import { dataReducer } from "./reducer";
 import { detailReducer } from "./detail-reducer";
+import { searchReducer } from "./searchReducer";
 
 export const rootReducer = combineReducers({
   data: dataReducer,
-  detail: detailReducer
-  //seach: searchReducer
+  detail: detailReducer,
+  search: searchReducer
 });
 
 export const store = createStore(
