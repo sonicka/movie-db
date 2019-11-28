@@ -43,7 +43,6 @@ export const fetchFromGenre = (genre: GENRE): any => {
     });
 };
 
-// todo
 export const fetchDetail = (category: CATEGORY, id: number): any => {
   return axios
     .get(
@@ -63,8 +62,23 @@ export const fetchDetail = (category: CATEGORY, id: number): any => {
     });
 };
 
-// todo
-export const searchMovies = (query: string): {} => {
-  let fetchedMovie = {};
-  return fetchedMovie;
+export const searchMovies = (query: string): any => {
+  console.log(query);
+  return axios
+    .get(
+      `${baseUrl}/3/search/multi?api_key=${apiKey}&language=en-US&query=${query}&page=1&include_adult=false`,
+      {}
+    )
+    .then(function(response) {
+      // handle success
+      console.log(response.data.results);
+      return response.data.results;
+    })
+    .catch(function(error) {
+      // handle error
+      throw error;
+    })
+    .finally(function() {
+      // always executed
+    });
 };

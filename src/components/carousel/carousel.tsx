@@ -1,0 +1,92 @@
+import React, { useState, useLayoutEffect } from "react";
+import { Link } from "@reach/router";
+import { Fab } from "@material-ui/core";
+import ItemsCarousel from "react-items-carousel";
+import { useStyles } from "./carousel-styles";
+import { CATEGORY } from "../../fetchData";
+
+interface ICarousel {
+  entities: any[];
+  category?: CATEGORY;
+  search: boolean;
+}
+
+function useWindowWidth() {
+  const [width, setWidth] = useState(0);
+  useLayoutEffect(() => {
+    function updateSize() {
+      setWidth(window.innerWidth);
+    }
+    window.addEventListener("resize", updateSize);
+    updateSize();
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+  return width;
+}
+
+const Carousel: React.FC<ICarousel & any> = ({
+  entities,
+  category,
+  search = false
+}) => {
+  const [activeItemIndex, setActiveItemIndex] = useState(0);
+  const width = useWindowWidth();
+  const classes = useStyles({ width: width });
+
+  console.log(width);
+
+  return (
+    <ItemsCarousel
+      infiniteLoop={true}
+      activePosition={"center"}
+      chevronWidth={60}
+      disableSwipe={false}
+      alwaysShowChevrons={false}
+      numberOfCards={
+        width < 400
+          ? Math.floor(window.innerWidth / 185)
+          : window.innerWidth / 185
+      }
+      slidesToScroll={1}
+      outsideChevron={false}
+      showSlither={false}
+      firstAndLastGutter={false}
+      activeItemIndex={activeItemIndex}
+      requestToChangeActive={(value: number) => setActiveItemIndex(value)}
+      rightChevron={
+        <Fab className={classes.fab} size="small">
+          {">"}
+        </Fab>
+      }
+      leftChevron={
+        <Fab className={classes.fab} size="small">
+          {"<"}
+        </Fab>
+      }
+      style={width < 400 ? { padding: "0 50%" } : {}}
+    >
+      {entities.map((o: any) => (
+        <div key={o.id} className={classes.imageContainer}>
+          <img
+            src={`http://image.tmdb.org/t/p/w185${o.poster_path}`}
+            alt={category === "movie" ? o.title : o.name}
+          />
+          <Link
+            to={`/title/${o.id}`}
+            state={{ category: search ? o.media_type : category }}
+          >
+            <div className={classes.imageOverlay}>
+              <div className={classes.imageText}>
+                {search && o.media_type === "movie" ? o.title : o.name}
+
+                {!search && category === "movie" ? o.title : o.name}
+              </div>
+            </div>
+          </Link>
+        </div>
+      ))}
+    </ItemsCarousel>
+  );
+};
+
+export default Carousel;

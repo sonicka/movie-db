@@ -48,7 +48,7 @@ const Detail: React.FC<IDetailProps & any> = ({
 
   useEffect(() => {
     dispatch(saveDetail(props.location.state.category, titleId)); // todo
-  }, [dispatch, titleId]);
+  }, [dispatch, titleId, props.location.state.category]);
 
   const formattedTitle = (title: string, date: string) =>
     title.concat(" (", date.substring(0, 4), ")");

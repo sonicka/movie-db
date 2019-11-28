@@ -4,8 +4,6 @@ export const FETCH_BEGIN = "FETCH_BEGIN";
 export const FETCH_SUCCESS = "FETCH_SUCCESS";
 export const FETCH_FAILURE = "FETCH_FAILURE";
 
-// export const SEARCH_SUCCESS = "SEARCH_SUCCESS";
-
 export type IwhichData =
   | "popular_movies"
   | "popular_series"
@@ -24,7 +22,6 @@ export function saveSomeData(whichData: IwhichData) {
     // let payload to FINISHED action
     try {
       let response: any;
-
       // iterate thru which data and do this for all elems
       // each response appent to payload variable
       // in the end dispatch the FINISHED action and save all fetched data to store
@@ -70,8 +67,3 @@ export function saveSomeData(whichData: IwhichData) {
     }
   };
 }
-
-// export const searchSuccess = (data: any) => ({
-//   type: SEARCH_SUCCESS,
-//   payload: { search: data }
-// });
