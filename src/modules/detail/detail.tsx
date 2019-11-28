@@ -35,10 +35,11 @@ const Detail: React.FC<IDetailProps & any> = ({
   )}`;
   const isSmall = useMediaQuery("(max-width:601px)");
   const isLarge = useMediaQuery("(min-width:1100px)"); // todo adjust
-  const bgImage = `http://image.tmdb.org/t/p/w1280/${backdrop_path}`;
+  const backgroundImage = backdrop_path
+    ? `url(http://image.tmdb.org/t/p/w1280/${backdrop_path})`
+    : null;
   const stylesProps = {
-    backgroundColor: "red",
-    bgImage: bgImage,
+    backgroundImage: backgroundImage,
     topPadding: isSmall ? "56px" : "64px",
     contentMargin: isLarge ? "200px" : "20px"
   };
@@ -126,7 +127,7 @@ const Detail: React.FC<IDetailProps & any> = ({
         </Grid>
         <Grid item xs={12}>
           <div className={classes.buttonWrapper}>
-            <Link to={`play/`} state={{ vid: vid, bgImage: bgImage }}>
+            <Link to={`play/`} state={{ vid: vid, bgImage: backgroundImage }}>
               <button className={classes.bottomButton}>PLAY MOVIE</button>
             </Link>
           </div>

@@ -7,7 +7,7 @@ export const useStyles = makeStyles({
     paddingTop: props.topPadding,
     display: "flex",
     backgroundColor: "black",
-    backgroundImage: `url(${props.bgImage})`,
+    backgroundImage: props.backgroundImage,
     backgroundPosition: "center center",
     backgroundRepeat: "no-repeat",
     backgroundAttachment: "fixed",

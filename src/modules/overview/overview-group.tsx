@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { get } from "lodash";
 import { store } from "../../store";
 import Carousel from "../../components/carousel/carousel";
+import Loader from "../../components/loader/loader";
 import { CATEGORY } from "../../fetchData";
 import { saveSomeData, IwhichData } from "../../actions/data-actions";
 import { removeDetail } from "../../actions/detail-actions";
@@ -47,7 +48,7 @@ const OverviewGroup: React.FC<IOverviewGroupProps & any> = ({
   return (
     <div className={classes.overviewGroup}>
       <h3 className={classes.overviewTitle}>{groupTitle}</h3>
-      {loading && <p className={classes.loading}> Loading...</p>}
+      {loading && <Loader />}
       {!loading && !error && (
         <Carousel entities={entities} category={category} />
       )}

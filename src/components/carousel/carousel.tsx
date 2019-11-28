@@ -66,7 +66,11 @@ const Carousel: React.FC<ICarousel & any> = ({
       {entities.map((o: any) => (
         <div key={o.id} className={classes.imageContainer}>
           <img
-            src={`http://image.tmdb.org/t/p/w185${o.poster_path}`}
+            src={
+              o.poster_path
+                ? `http://image.tmdb.org/t/p/w185${o.poster_path}`
+                : "https://dummyimage.com/185x281/000/fff.jpg&text=Image+Unavailable"
+            }
             alt={category === "movie" ? o.title : o.name}
           />
           <Link
@@ -76,7 +80,6 @@ const Carousel: React.FC<ICarousel & any> = ({
             <div className={classes.imageOverlay}>
               <div className={classes.imageText}>
                 {search && o.media_type === "movie" ? o.title : o.name}
-
                 {!search && category === "movie" ? o.title : o.name}
               </div>
             </div>
