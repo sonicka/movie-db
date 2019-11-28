@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useLayoutEffect } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { get } from "lodash";
 import { store } from "../../store";
@@ -8,6 +8,7 @@ import { IwhichData } from "../../dataActions";
 import { removeDetail } from "../../detailActions";
 import { CATEGORY } from "../../fetchData";
 import Carousel from "../../components/carousel/carousel";
+import { clearSearch } from "../../searchActions";
 
 // pure-react-carousel"; // remove
 // import Slider from "react-slick"; // remove
@@ -22,32 +23,22 @@ interface IMovie {
   src: string;
 }
 
-interface IOverviewGroup {
+interface IOverviewGroupProps {
   groupTitle: string;
   groupId: IwhichData;
   category?: CATEGORY;
   search: boolean;
 }
 
-function useWindowSize() {
-  const [size, setSize] = useState([0, 0]);
-  useLayoutEffect(() => {
-    function updateSize() {
-      setSize([window.innerWidth, window.innerHeight]);
-    }
-    window.addEventListener("resize", updateSize);
-    updateSize();
-    return () => window.removeEventListener("resize", updateSize);
-  }, []);
-  return size;
+interface IOverviewGroupState {
+  //todo
 }
 
-const OverviewGroup: React.FC<IOverviewGroup & any> = ({
+const OverviewGroup: React.FC<IOverviewGroupProps & any> = ({
   dispatch,
   groupTitle,
   groupId,
   category,
-  //search = false,
   ...props
 }) => {
   const classes = useStyles(props);
@@ -56,15 +47,23 @@ const OverviewGroup: React.FC<IOverviewGroup & any> = ({
   const entities = get(state, `${groupId}.entities`, []);
   const error = get(state, `${groupId}.error`);
 
-  const [activeItemIndex, setActiveItemIndex] = useState(0);
-  const [width, height] = useWindowSize();
-
   useEffect(() => {
     dispatch(removeDetail());
+    dispatch(clearSearch());
     dispatch(saveSomeData(groupId));
   }, [dispatch, groupId]);
 
-  return <Carousel />;
+  return (
+    <div className={classes.overviewGroup}>
+      <h3 className={classes.overviewTitle}>{groupTitle}</h3>
+      {loading && <p className={classes.loading}> Loading...</p>}
+      {!loading && !error && (
+        <Carousel entities={entities} category={category} />
+      )}
+      {error && <i>error occured while loading data</i>}
+      {/* todo error */}
+    </div>
+  );
 };
 
 const mapStateToProps = (state: any) => ({

@@ -1,32 +1,76 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "@reach/router";
+import { useDebouncedCallback } from "use-debounce";
+import { useMediaQuery } from "@material-ui/core";
 import SearchBar from "material-ui-search-bar";
-import OverviewGroup from "../overview/overview-group";
-import { search } from "../../searchActions";
+import Carousel from "../../components/carousel/carousel";
+import { search, clearSearch } from "../../searchActions";
+import { removeDetail } from "../../detailActions";
+import { useStyles } from "./search-styles";
 
-const Search: React.FC<RouteComponentProps & any> = props => {
-  const [searchQuery, setSearchQuery] = useState("");
+interface ISearchProps extends RouteComponentProps {
+  searchQuery: string;
+  searchResults: any[];
+}
 
-  // useEffect(() => {
-  //   props.dispatch(search(searchQuery)); // todo
-  // }, [searchQuery]);
+interface ISearchState extends RouteComponentProps {
+  search: {
+    query: string;
+    results: any[];
+  };
+}
+
+const Search: React.FC<ISearchProps & any> = ({
+  searchQuery,
+  searchResults,
+  dispatch
+}) => {
+  const isSmall = useMediaQuery("(max-width:576px)");
+  const classes = useStyles({ marginTop: isSmall ? "100px" : "200px" });
+  const [query, setSearchQuery] = useState(searchQuery);
+
+  useEffect(() => {
+    dispatch(removeDetail());
+  }, [dispatch]);
+
+  const [debouncedSearch] = useDebouncedCallback(value => {
+    dispatch(search(value));
+  }, 1000);
+
+  const handleChange = (value: string) => {
+    setSearchQuery(value);
+    debouncedSearch(value);
+    if (value.length === 0) {
+      dispatch(clearSearch());
+    }
+  };
+
+  const handleCancel = () => {
+    setSearchQuery("");
+    dispatch(clearSearch());
+  };
 
   return (
     <div>
       <SearchBar
-        onChange={newValue => props.dispatch(search(newValue))}
-        onRequestSearch={() => console.log(searchQuery)}
-        value={searchQuery}
-        style={{
-          margin: "0 auto",
-          maxWidth: 800,
-          marginTop: "200px"
-        }}
+        onChange={value => handleChange(value)}
+        value={query}
+        onCancelSearch={handleCancel}
+        className={classes.searchBar}
       />
-      <OverviewGroup groupTitle="Search results" groupId={"popular_movies"} />
+      <div className={classes.carouselWrapper}>
+        <Carousel search entities={searchResults} />
+      </div>
     </div>
   );
 };
 
-export default connect()(Search);
+const mapStateToProps = (state: ISearchState) => {
+  return {
+    searchQuery: state.search.query,
+    searchResults: state.search.results
+  };
+};
+
+export default connect(mapStateToProps)(Search);

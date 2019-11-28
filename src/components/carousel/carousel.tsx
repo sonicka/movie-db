@@ -1,128 +1,92 @@
-import React, { useEffect, useState, useLayoutEffect } from "react";
-import { connect } from "react-redux";
+import React, { useState, useLayoutEffect } from "react";
 import { Link } from "@reach/router";
 import { Fab } from "@material-ui/core";
-import { get } from "lodash";
 import ItemsCarousel from "react-items-carousel";
-import { store } from "../../store";
-import { useStyles } from "../../modules/overview/overview-styles";
-import { saveSomeData } from "../../dataActions";
-import { IwhichData } from "../../dataActions";
-import { removeDetail } from "../../detailActions";
+import { useStyles } from "./carousel-styles";
 import { CATEGORY } from "../../fetchData";
 
-interface IMovie {
-  title: string;
-  src: string;
-}
-
-interface IOverviewGroup {
-  groupTitle: string;
-  groupId: IwhichData;
+interface ICarousel {
+  entities: any[];
   category?: CATEGORY;
   search: boolean;
 }
 
-function useWindowSize() {
-  const [size, setSize] = useState([0, 0]);
+function useWindowWidth() {
+  const [width, setWidth] = useState(0);
   useLayoutEffect(() => {
     function updateSize() {
-      setSize([window.innerWidth, window.innerHeight]);
+      setWidth(window.innerWidth);
     }
     window.addEventListener("resize", updateSize);
     updateSize();
     return () => window.removeEventListener("resize", updateSize);
   }, []);
-  return size;
+  return width;
 }
 
-const Carousel: React.FC<IOverviewGroup & any> = ({
-  dispatch,
-  groupTitle,
-  groupId,
+const Carousel: React.FC<ICarousel & any> = ({
+  entities,
   category,
-  search = false,
-  ...props
+  search = false
 }) => {
-  const classes = useStyles(props);
-  const state = store.getState().data;
-  const loading = get(state, `${groupId}.loading`);
-  const entities = get(state, `${groupId}.entities`, []);
-  const error = get(state, `${groupId}.error`);
-
   const [activeItemIndex, setActiveItemIndex] = useState(0);
-  const [width, height] = useWindowSize();
+  const width = useWindowWidth();
+  const classes = useStyles({ width: width });
 
-  useEffect(() => {
-    dispatch(removeDetail());
-    dispatch(saveSomeData(groupId));
-  }, [dispatch, groupId]);
+  console.log(width);
 
   return (
-    <div className={classes.overviewGroup}>
-      <h3 className={classes.overviewTitle}>{groupTitle}</h3>
-      {loading && <p className={classes.loading}> Loading...</p>}
-      <div
-        style={{
-          padding: "0",
-          maxWidth: "1400px",
-          minWidth: "185px",
-          margin: "auto"
-        }}
-      >
-        <ItemsCarousel
-          infiniteLoop={true}
-          gutter={Math.floor(window.innerWidth / 92)}
-          activePosition={"center"}
-          chevronWidth={60}
-          disableSwipe={false}
-          alwaysShowChevrons={false}
-          numberOfCards={
-            width < 400
-              ? Math.floor(window.innerWidth / 185)
-              : window.innerWidth / 185
-          }
-          slidesToScroll={1}
-          outsideChevron={false}
-          showSlither={false}
-          firstAndLastGutter={false}
-          activeItemIndex={activeItemIndex}
-          requestToChangeActive={(value: number) => setActiveItemIndex(value)}
-          rightChevron={
-            <Fab className={classes.fab} size="small">
-              {">"}
-            </Fab>
-          }
-          leftChevron={
-            <Fab className={classes.fab} size="small">
-              {"<"}
-            </Fab>
-          }
-        >
-          {entities.map((o: any) => (
-            <div key={o.id} style={{ width: "185px" }}>
-              <Link to={`/title/${o.id}`} state={{ category: category }}>
-                {console.log(o)}
-                <img
-                  src={`http://image.tmdb.org/t/p/w185${o.poster_path}`}
-                  alt={category === "movie" ? o.title : o.name}
-                />
-              </Link>
-              <p className={classes.legend}>
-                {category === "movie" ? o.title : o.name}
-              </p>
+    <ItemsCarousel
+      infiniteLoop={true}
+      activePosition={"center"}
+      chevronWidth={60}
+      disableSwipe={false}
+      alwaysShowChevrons={false}
+      numberOfCards={
+        width < 400
+          ? Math.floor(window.innerWidth / 185)
+          : window.innerWidth / 185
+      }
+      slidesToScroll={1}
+      outsideChevron={false}
+      showSlither={false}
+      firstAndLastGutter={false}
+      activeItemIndex={activeItemIndex}
+      requestToChangeActive={(value: number) => setActiveItemIndex(value)}
+      rightChevron={
+        <Fab className={classes.fab} size="small">
+          {">"}
+        </Fab>
+      }
+      leftChevron={
+        <Fab className={classes.fab} size="small">
+          {"<"}
+        </Fab>
+      }
+      style={width < 400 ? { padding: "0 50%" } : {}}
+    >
+      {entities.map((o: any) => (
+        <div key={o.id} className={classes.imageContainer}>
+          <img
+            src={`http://image.tmdb.org/t/p/w185${o.poster_path}`}
+            alt={category === "movie" ? o.title : o.name}
+          />
+          <Link
+            to={`/title/${o.id}`}
+            state={{ category: search ? o.media_type : category }}
+          >
+            <div className={classes.imageOverlay}>
+              <div className={classes.imageText}>
+                {search && o.media_type === "movie" ? o.title : o.name}
+
+                {!search && category === "movie" ? o.title : o.name}
+              </div>
             </div>
-          ))}
-        </ItemsCarousel>
-      </div>
-      {error && <i>error occured while loading data</i>}
-      {/* todo error */}
-    </div>
+          </Link>
+        </div>
+      ))}
+    </ItemsCarousel>
   );
 };
 
-const mapStateToProps = (state: any) => ({
-  state: state.data // todo?
-});
-
-export default connect(mapStateToProps)(Carousel);
+export default Carousel;

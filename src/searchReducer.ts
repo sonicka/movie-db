@@ -1,12 +1,14 @@
 import * as actions from "./searchActions";
 
 interface IInitialSearchState {
+  query: string;
   loading: boolean;
   error: any;
   results: any[];
 }
 
 const initialSearchState = {
+  query: "",
   loading: false,
   error: null,
   results: []

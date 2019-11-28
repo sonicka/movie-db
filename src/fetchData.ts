@@ -62,12 +62,11 @@ export const fetchDetail = (category: CATEGORY, id: number): any => {
     });
 };
 
-// todo
 export const searchMovies = (query: string): any => {
   console.log(query);
   return axios
     .get(
-      `${baseUrl}/3/search/multi?api_key=${apiKey}&language=en-US&query=${query}&page=1&include_adult=true`,
+      `${baseUrl}/3/search/multi?api_key=${apiKey}&language=en-US&query=${query}&page=1&include_adult=false`,
       {}
     )
     .then(function(response) {

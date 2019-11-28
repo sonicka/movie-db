@@ -22,18 +22,17 @@ export function saveDetail(type: CATEGORY, id: number) {
         type: FETCH_DETAIL_SUCCESS,
         payload: {
           id: id,
-          category: type,
+          categorydd: type,
           data: response
         }
       });
     } catch (error) {
-      console.log("error");
-      console.log(error);
       dispatch({
         type: FETCH_DETAIL_FAILURE,
         payload: {
           id: id,
-          error: error.response
+          error: error.response,
+          lol: 595
         }
       });
     }

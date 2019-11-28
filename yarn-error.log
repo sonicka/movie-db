@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/Cellar/node/12.12.0/bin/node /usr/local/Cellar/yarn/1.19.1/libexec/bin/yarn.js add @types/material-ui-search-bar
+  /usr/local/Cellar/node/12.12.0/bin/node /usr/local/Cellar/yarn/1.19.1/libexec/bin/yarn.js add @types/use-debounce
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2fmaterial-ui-search-bar: Not found
+  Error: https://registry.yarnpkg.com/@types%2fuse-debounce: Not found
       at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.19.1/libexec/lib/cli.js:66926:18)
       at Request.self.callback (/usr/local/Cellar/yarn/1.19.1/libexec/lib/cli.js:140564:22)
       at Request.emit (events.js:210:5)
@@ -50,7 +50,7 @@ npm manifest:
       "axios": "^0.19.0",
       "date-fns": "^2.8.0",
       "lodash": "^4.17.15",
-      "material-ui-search-bar": "^0.4.2",
+      "material-ui-search-bar": "^1.0.0-beta.14",
       "mux.js": "^5.5.1",
       "pure-react-carousel": "^1.23.3",
       "react": "^16.11.0",
@@ -68,7 +68,8 @@ npm manifest:
       "semantic-ui-react": "^0.88.1",
       "shaka-player": "^2.5.6",
       "slick-carousel": "^1.8.1",
-      "typescript": "3.7.2"
+      "typescript": "3.7.2",
+      "use-debounce": "^3.1.0"
     },
     "scripts": {
       "start": "react-scripts start",
@@ -6693,11 +6694,12 @@ Lockfile:
     dependencies:
       css-mediaquery "^0.1.2"
   
-  material-ui-search-bar@^0.4.2:
-    version "0.4.2"
-    resolved "https://registry.yarnpkg.com/material-ui-search-bar/-/material-ui-search-bar-0.4.2.tgz#2f4413465a9a6f2a3b495e62ec3cbc24ac523b75"
-    integrity sha1-L0QTRlqabyo7SV5i7Dy8JKxSO3U=
+  material-ui-search-bar@^1.0.0-beta.14:
+    version "1.0.0-beta.14"
+    resolved "https://registry.yarnpkg.com/material-ui-search-bar/-/material-ui-search-bar-1.0.0-beta.14.tgz#6ab53f3c2c58c0c634b13a96f7ebaf068dcbb27e"
+    integrity sha512-K4i4iUi0Dp+iEvcAFc/KmDBS4kOtEY0Kh5ID1RX884PMhKMT9rIJcKkhPhThYPji4cCXc1pz8t5F54VMbhLmcw==
     dependencies:
+      classnames "^2.2.5"
       prop-types "^15.5.8"
   
   md5.js@^1.3.4:
@@ -10589,6 +10591,11 @@ Lockfile:
     dependencies:
       punycode "1.3.2"
       querystring "0.2.0"
+  
+  use-debounce@^3.1.0:
+    version "3.1.0"
+    resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-3.1.0.tgz#05a5c8cd3c2f309699f08961d7c8bbe7f68720bb"
+    integrity sha512-DEf3L/ZKkOSTARk/DHlC6KAAJKwMqpck8Zx06SM2Wr+LfU1TzhO8hZRzB/qbpSQqREYWQes24n1q9doeTMqF4g==
   
   use@^3.1.0:
     version "3.1.1"
