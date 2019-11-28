@@ -9,14 +9,6 @@ import { removeDetail } from "../../actions/detail-actions";
 import { clearSearch } from "../../actions/search-actions";
 import { useStyles } from "./overview-styles";
 
-// pure-react-carousel"; // remove
-// import Slider from "react-slick"; // remove
-// import Carousel, { Dots } from "@brainhubeu/react-carousel"; // remove
-// import Carousel from "react-multi-carousel"; // remove
-// import Carousel from "react-responsive-carousel/lib/components/Carousel"; // remove
-// import { Image, Label } from "semantic-ui-react"; // remove
-// import "semantic-ui-css/semantic.min.css";
-
 interface IMovie {
   title: string;
   src: string;
