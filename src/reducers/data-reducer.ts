@@ -1,4 +1,4 @@
-import * as actions from "./dataActions";
+import * as actions from "../constants";
 
 interface IEntityData {
   loading: boolean;

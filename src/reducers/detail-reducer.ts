@@ -1,4 +1,4 @@
-import * as actions from "./detailActions";
+import * as actions from "../constants";
 
 interface IInitialDataState {
   loading: boolean;

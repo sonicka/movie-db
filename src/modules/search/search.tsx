@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "@reach/router";
-import { useDebouncedCallback } from "use-debounce";
 import { useMediaQuery } from "@material-ui/core";
 import SearchBar from "material-ui-search-bar";
+import { useDebouncedCallback } from "use-debounce";
 import Carousel from "../../components/carousel/carousel";
-import { search, clearSearch } from "../../searchActions";
-import { removeDetail } from "../../detailActions";
+import { search, clearSearch } from "../../actions/search-actions";
+import { removeDetail } from "../../actions/detail-actions";
 import { useStyles } from "./search-styles";
 
 interface ISearchProps extends RouteComponentProps {

@@ -33,12 +33,10 @@ const Carousel: React.FC<ICarousel & any> = ({
   const width = useWindowWidth();
   const classes = useStyles({ width: width });
 
-  console.log(width);
-
   return (
     <ItemsCarousel
       infiniteLoop={true}
-      activePosition={"center"}
+      activePosition="center"
       chevronWidth={60}
       disableSwipe={false}
       alwaysShowChevrons={false}

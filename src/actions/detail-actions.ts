@@ -1,11 +1,11 @@
 import { AnyAction, Dispatch } from "redux";
-import { fetchDetail } from "./fetchData";
-import { CATEGORY } from "./fetchData";
-
-export const FETCH_DETAIL_BEGIN = "FETCH_DETAIL_BEGIN";
-export const FETCH_DETAIL_SUCCESS = "FETCH_DETAIL_SUCCESS";
-export const FETCH_DETAIL_FAILURE = "FETCH_DETAIL_FAILURE";
-export const REMOVE_DETAIL = "REMOVE_DETAIL";
+import { fetchDetail, CATEGORY } from "../fetchData";
+import {
+  FETCH_DETAIL_BEGIN,
+  FETCH_DETAIL_SUCCESS,
+  FETCH_DETAIL_FAILURE,
+  REMOVE_DETAIL
+} from "../constants";
 
 export function saveDetail(type: CATEGORY, id: number) {
   return async (dispatch: Dispatch<AnyAction>): Promise<void> => {

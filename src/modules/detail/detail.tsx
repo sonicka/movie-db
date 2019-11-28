@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps, Link } from "@reach/router";
-import format from "date-fns/format";
-import { saveDetail } from "../../detailActions";
-import { useStyles } from "./detail-styles";
 import { Grid, useMediaQuery } from "@material-ui/core";
 import { get } from "lodash";
+import format from "date-fns/format";
 import { CATEGORY } from "../../fetchData";
+import { saveDetail } from "../../actions/detail-actions";
+import { useStyles } from "./detail-styles";
 
 interface IDetailProps extends RouteComponentProps {
   titleId?: number; // todo remove ? after implementing video

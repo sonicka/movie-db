@@ -1,4 +1,4 @@
-import * as actions from "./searchActions";
+import * as actions from "../constants";
 
 interface IInitialSearchState {
   query: string;

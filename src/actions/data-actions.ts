@@ -1,8 +1,6 @@
 import { AnyAction, Dispatch } from "redux";
-import { fetchPopular, fetchFromGenre } from "./fetchData";
-export const FETCH_BEGIN = "FETCH_BEGIN";
-export const FETCH_SUCCESS = "FETCH_SUCCESS";
-export const FETCH_FAILURE = "FETCH_FAILURE";
+import { fetchPopular, fetchFromGenre } from "../fetchData";
+import { FETCH_BEGIN, FETCH_SUCCESS, FETCH_FAILURE } from "../constants";
 
 export type IwhichData =
   | "popular_movies"
@@ -10,7 +8,6 @@ export type IwhichData =
   | "family_movies"
   | "documentaries";
 
-// make array from whichData
 export function saveSomeData(whichData: IwhichData) {
   return async (dispatch: Dispatch<AnyAction>): Promise<void> => {
     dispatch({
@@ -19,12 +16,8 @@ export function saveSomeData(whichData: IwhichData) {
         id: whichData
       }
     });
-    // let payload to FINISHED action
     try {
       let response: any;
-      // iterate thru which data and do this for all elems
-      // each response appent to payload variable
-      // in the end dispatch the FINISHED action and save all fetched data to store
       switch (whichData) {
         case "popular_movies": {
           response = await fetchPopular("movie");

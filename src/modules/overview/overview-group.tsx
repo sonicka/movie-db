@@ -2,13 +2,12 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { get } from "lodash";
 import { store } from "../../store";
-import { useStyles } from "./overview-styles";
-import { saveSomeData } from "../../dataActions";
-import { IwhichData } from "../../dataActions";
-import { removeDetail } from "../../detailActions";
-import { CATEGORY } from "../../fetchData";
 import Carousel from "../../components/carousel/carousel";
-import { clearSearch } from "../../searchActions";
+import { CATEGORY } from "../../fetchData";
+import { saveSomeData, IwhichData } from "../../actions/data-actions";
+import { removeDetail } from "../../actions/detail-actions";
+import { clearSearch } from "../../actions/search-actions";
+import { useStyles } from "./overview-styles";
 
 // pure-react-carousel"; // remove
 // import Slider from "react-slick"; // remove

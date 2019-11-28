@@ -1,10 +1,11 @@
 import { AnyAction, Dispatch } from "redux";
-import { searchMovies } from "./fetchData";
-
-export const SEARCH_BEGIN = "SEARCH_BEGIN";
-export const SEARCH_SUCCESS = "SEARCH_SUCCESS";
-export const SEARCH_FAILURE = "SEARCH_FAILURE";
-export const CLEAR_SEARCH = "CLEAR_SEARCH";
+import { searchMovies } from "../fetchData";
+import {
+  SEARCH_BEGIN,
+  SEARCH_SUCCESS,
+  SEARCH_FAILURE,
+  CLEAR_SEARCH
+} from "../constants";
 
 export function search(query: string) {
   return async (dispatch: Dispatch<AnyAction>): Promise<void> => {
