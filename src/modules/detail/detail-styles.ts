@@ -10,7 +10,7 @@ interface IWrapperStylesProps {
 /** Styles for Detail page */
 export const useStyles = makeStyles({
   wrapperWrapper: (props: IWrapperStylesProps) => ({
-    height: "100vh",
+    height: "100%",
     width: "100vw",
     display: "flex",
     backgroundColor: "black",

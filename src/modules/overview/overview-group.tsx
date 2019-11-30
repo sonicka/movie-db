@@ -68,6 +68,9 @@ const OverviewGroup: React.FC<IOverviewGroupProps & any> = ({
           <h4 className={classes.error}>Error occured while loading data!</h4>
         </div>
       )}
+      {!loading && !error && !entities && (
+        <div className={classes.noEntitiesWrapper}></div>
+      )}
     </div>
   );
 };

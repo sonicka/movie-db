@@ -56,11 +56,13 @@ const Search: React.FC<ISearchProps & any> = ({
 
   return (
     <div>
+      {/* todo fix the loader - show right after starting typing */}
       <SearchBar
         onChange={value => handleChange(value)}
         value={query}
         onCancelSearch={handleCancel}
         className={classes.searchBar}
+        classes={{ root: classes.searchRoot, input: classes.searchInput }}
       />
       <div className={classes.carouselWrapper}>
         <Carousel search entities={searchResults} />
