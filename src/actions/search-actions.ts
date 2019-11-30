@@ -7,6 +7,7 @@ import {
   CLEAR_SEARCH
 } from "../constants";
 
+/** Action that saves search data to Redux store */
 export function search(query: string) {
   return async (dispatch: Dispatch<AnyAction>): Promise<void> => {
     if (query.length > 0) {
@@ -36,6 +37,7 @@ export function search(query: string) {
   };
 }
 
+/** Action that clears search data from Redux store */
 export function clearSearch() {
   return (dispatch: Dispatch<AnyAction>): void => {
     dispatch({

@@ -2,15 +2,16 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { RouteComponentProps, Link } from "@reach/router";
-import { Grid, useMediaQuery } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { get } from "lodash";
 import { saveDetail } from "../../actions/detail-actions";
-import { useStyles } from "./detail-styles";
 import Loader from "../../components/loader/loader";
 import MovieDetail from "./detail-movie";
 import TvDetail from "./detail-tv";
+import { useStyles } from "./detail-styles";
 import { Category } from "../../constants";
 
+/** Props expected by Detail component */
 interface IDetailProps extends RouteComponentProps {
   titleId: number;
   dispatch: Dispatch<any>;
@@ -40,6 +41,7 @@ interface IDetailProps extends RouteComponentProps {
   loading: boolean;
 }
 
+/** Component that holds details of given movie/tv show */
 const Detail: React.FC<IDetailProps> = ({
   titleId,
   dispatch,
@@ -47,20 +49,21 @@ const Detail: React.FC<IDetailProps> = ({
   detail,
   loading
 }) => {
-  const video = `https://www.youtube.com/watch?v=${get(
-    detail.videos,
-    "results[0].key",
-    ""
-  )}`;
-  const isSmall = useMediaQuery("(max-width:601px)");
-  const isLarge = useMediaQuery("(min-width:1100px)"); // todo adjust
+  // const video = `https://www.youtube.com/watch?v=${get(
+  //   detail.videos,
+  //   "results[0].key",
+  //   ""
+  // )}`;
+
   const backgroundImage = detail.backdrop_path
     ? `url(http://image.tmdb.org/t/p/w1280/${detail.backdrop_path})`
     : null;
-  const stylesProps = {
-    backgroundImage: backgroundImage,
-    contentMargin: isLarge ? "200px" : "20px"
-  };
+  let stylesProps = {};
+  if (backgroundImage) {
+    stylesProps = {
+      backgroundImage: backgroundImage
+    };
+  }
   const classes = useStyles(stylesProps);
 
   const category = get(location, "state.category", "");
@@ -92,7 +95,6 @@ const Detail: React.FC<IDetailProps> = ({
           <>
             <MovieDetail
               title={formattedTitle(detail.title, detail.release_date)}
-              tagline={detail.tagline}
               overview={detail.overview}
               releaseDate={formattedDate(detail.release_date) || ""}
               runtime={detail.runtime}
@@ -132,7 +134,10 @@ const Detail: React.FC<IDetailProps> = ({
           <div className={classes.buttonWrapper}>
             <Link
               to={`play/`}
-              state={{ video: video, posterUrl: backgroundImage }}
+              state={{
+                //video: video,
+                posterUrl: backgroundImage
+              }}
             >
               <button className={classes.bottomButton}>PLAY MOVIE</button>
             </Link>

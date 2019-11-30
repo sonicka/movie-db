@@ -9,6 +9,7 @@ import {
   DataType
 } from "../constants";
 
+/** Action that saves fetched data from given movie category to Redux store */
 export function saveData(dataType: DataType) {
   return async (dispatch: Dispatch<AnyAction>): Promise<void> => {
     dispatch({
@@ -17,8 +18,6 @@ export function saveData(dataType: DataType) {
         id: dataType
       }
     });
-    console.log("dataType");
-    console.log(dataType);
     try {
       let response: any;
       switch (dataType) {
@@ -36,10 +35,9 @@ export function saveData(dataType: DataType) {
           break;
         }
         default: {
-          throw new Error("Some weird shit just happened."); // todo
+          throw new Error("Unknown category of movies requested!");
         }
       }
-
       dispatch({
         type: FETCH_SUCCESS,
         payload: {
@@ -52,7 +50,7 @@ export function saveData(dataType: DataType) {
         type: FETCH_FAILURE,
         payload: {
           id: dataType,
-          error: error.response
+          error: error
         }
       });
     }

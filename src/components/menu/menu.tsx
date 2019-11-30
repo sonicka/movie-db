@@ -1,10 +1,9 @@
 import React from "react";
 import { navigate } from "@reach/router";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Button from "@material-ui/core/Button";
+import { AppBar, Toolbar, Button } from "@material-ui/core";
 import { useStyles } from "./menu-styles";
 
+/** Menu component shown on the top of all pages */
 const Menu: React.FC = () => {
   const classes = useStyles();
 

@@ -1,12 +1,14 @@
 import * as actions from "../constants";
 
-interface IInitialSearchState {
+/** Type of Search state */
+interface ISearchState {
   query: string;
   loading: boolean;
   error: any;
   results: any[];
 }
 
+/** Initial state of Search */
 const initialSearchState = {
   query: "",
   loading: false,
@@ -14,8 +16,9 @@ const initialSearchState = {
   results: []
 };
 
+/** Reducer for Search actions */
 export const searchReducer = (
-  state: IInitialSearchState = initialSearchState,
+  state: ISearchState = initialSearchState,
   action: any
 ) => {
   switch (action.type) {

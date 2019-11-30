@@ -5,19 +5,20 @@ import ItemsCarousel from "react-items-carousel";
 import { useStyles } from "./carousel-styles";
 import { CategoryType } from "../../constants";
 
+/** Props expected by Carousel component */
+interface ICarousel {
+  entities: IEntity[];
+  category?: CategoryType;
+  search?: boolean;
+}
+
+/** Type of entities coming to Carousel via props */
 interface IEntity {
   id: string;
   name?: string;
   title?: string;
   poster_path: string;
   media_type: string;
-}
-
-/** Props expected by Carousel component */
-interface ICarousel {
-  entities: IEntity[];
-  category?: CategoryType;
-  search?: boolean;
 }
 
 /** Hook to get current window width */
@@ -43,6 +44,9 @@ const Carousel: React.FC<ICarousel> = ({
   const [activeItemIndex, setActiveItemIndex] = useState(0);
   const width = useWindowWidth();
   const classes = useStyles({ width: width });
+
+  console.log("entities in carousel");
+  console.log(entities);
 
   return (
     <ItemsCarousel

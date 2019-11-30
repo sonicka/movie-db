@@ -1,19 +1,22 @@
 import * as actions from "../constants";
 
-interface IInitialDataState {
+/** Type of Detail state */
+interface IDetailState {
   loading: boolean;
   error: any;
   detailData: {};
 }
 
-const initialDataState = {
+/** Initial state of Detail */
+const initialDetailState = {
   loading: false,
   error: null,
   detailData: {}
 };
 
+/** Reducer for Detail actions */
 export const detailReducer = (
-  state: IInitialDataState = initialDataState,
+  state: IDetailState = initialDetailState,
   action: any
 ) => {
   switch (action.type) {
@@ -37,7 +40,7 @@ export const detailReducer = (
         loading: false
       };
     case actions.REMOVE_DETAIL:
-      return initialDataState;
+      return initialDetailState;
     default:
       return state;
   }

@@ -1,10 +1,11 @@
 import React from "react";
 import { RouteComponentProps } from "@reach/router";
-import { Grid, IconButton, useMediaQuery } from "@material-ui/core";
+import { Grid, IconButton, Tooltip, useMediaQuery } from "@material-ui/core";
 import LanguageIcon from "@material-ui/icons/Language";
 import Rating from "../../components/rating/rating";
 import { useStyles } from "./detail-styles";
 
+/** Props expected by TvDetail component */
 interface ITvDetailProps extends RouteComponentProps {
   title: string;
   overview: string;
@@ -20,6 +21,7 @@ interface ITvDetailProps extends RouteComponentProps {
   homepage: string;
 }
 
+/** Component that contains detail information about a TV show */
 const TvDetail: React.FC<ITvDetailProps> = ({
   title = "",
   overview = "",
@@ -34,9 +36,9 @@ const TvDetail: React.FC<ITvDetailProps> = ({
   voteCount = 0,
   homepage = ""
 }) => {
-  const isLarge = useMediaQuery("(min-width:1100px)"); // todo adjust
+  const isLarge = useMediaQuery("(min-width:1150px)");
   const stylesProps = {
-    contentMargin: isLarge ? "200px" : "20px"
+    contentMargin: isLarge ? "180px" : "30px"
   };
   const classes = useStyles(stylesProps);
 
@@ -74,7 +76,9 @@ const TvDetail: React.FC<ITvDetailProps> = ({
               <div className={classes.detailItemTitle}>Number of episodes</div>
               <div
                 className={classes.detailItemText}
-              >{`${numberOfEpisodes} in ${numberOfSeasons} seasons`}</div>
+              >{`${numberOfEpisodes} in ${numberOfSeasons} ${
+                numberOfSeasons === 1 ? "season" : "seasons"
+              }`}</div>
             </div>
             <div className={classes.detailItem}>
               <div className={classes.detailItemTitle}>Original language</div>
@@ -96,9 +100,11 @@ const TvDetail: React.FC<ITvDetailProps> = ({
         </Grid>
         <Grid item xs={12} md={12}>
           <div className={classes.moreInfoIcons}>
-            <a href={homepage} target="_blank">
+            <a href={homepage} target="_blank" rel="noopener noreferrer">
               <IconButton>
-                <LanguageIcon />
+                <Tooltip title="Website">
+                  <LanguageIcon />
+                </Tooltip>
               </IconButton>
             </a>
           </div>

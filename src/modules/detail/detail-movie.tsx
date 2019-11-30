@@ -6,9 +6,9 @@ import MovieIcon from "@material-ui/icons/Movie";
 import Rating from "../../components/rating/rating";
 import { useStyles } from "./detail-styles";
 
+/** Props expected by MovieDetail component */
 interface IMovieDetailProps extends RouteComponentProps {
   title: string;
-  tagline: string;
   overview: string;
   releaseDate: string;
   runtime: string;
@@ -22,9 +22,9 @@ interface IMovieDetailProps extends RouteComponentProps {
   imdbId: string;
 }
 
+/** Component that contains detail information about a movie */
 const MovieDetail: React.FC<IMovieDetailProps> = ({
   title = "",
-  tagline = "",
   overview = "",
   releaseDate = "",
   runtime = 0,
@@ -37,9 +37,9 @@ const MovieDetail: React.FC<IMovieDetailProps> = ({
   homepage = "",
   imdbId = ""
 }) => {
-  const isLarge = useMediaQuery("(min-width:1100px)"); // todo adjust
+  const isLarge = useMediaQuery("(min-width:1150px)");
   const stylesProps = {
-    contentMargin: isLarge ? "200px" : "20px"
+    contentMargin: isLarge ? "180px" : "30px"
   };
   const classes = useStyles(stylesProps);
 
@@ -104,7 +104,7 @@ const MovieDetail: React.FC<IMovieDetailProps> = ({
         </Grid>
         <Grid item xs={12} md={12}>
           <div className={classes.moreInfoIcons}>
-            <a href={homepage} target="_blank">
+            <a href={homepage} target="_blank" rel="noopener noreferrer">
               <IconButton>
                 <Tooltip title="Website">
                   <LanguageIcon />
@@ -112,7 +112,11 @@ const MovieDetail: React.FC<IMovieDetailProps> = ({
               </IconButton>
             </a>
             {imdbId && (
-              <a href={`https://www.imdb.com/title/${imdbId}`} target="_blank">
+              <a
+                href={`https://www.imdb.com/title/${imdbId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <IconButton>
                   <Tooltip title="IMDb">
                     <MovieIcon />

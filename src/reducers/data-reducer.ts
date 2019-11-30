@@ -1,5 +1,11 @@
 import * as actions from "../constants";
 
+/** Type of Data state */
+interface IDataState {
+  [c: string]: IEntityData;
+}
+
+/** Type of entities saved in Data state */
 interface IEntityData {
   loading: boolean;
   error?: any;
@@ -7,12 +13,12 @@ interface IEntityData {
   entities?: {};
 }
 
-interface IInitialState {}
+/** Initial state of Data */
+const initialDataState: { [c: string]: IEntityData } = {};
 
-const initialState: IInitialState = {};
-
+/** Reducer for Data actions */
 export const dataReducer = (
-  state: IInitialState = initialState,
+  state: IDataState = initialDataState,
   action: any
 ) => {
   switch (action.type) {
@@ -39,7 +45,6 @@ export const dataReducer = (
           loading: false
         }
       };
-
     default:
       return state;
   }

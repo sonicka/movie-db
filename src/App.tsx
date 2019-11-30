@@ -7,11 +7,7 @@ import DetailVideo from "./modules/detail/detail-video";
 import Search from "./modules/search/search";
 import "./App.css";
 
-// react-responsive - to manage responsiveness of the design
-// reach router - to handle routing between pages
-// material-ui - to use material design layout components
-// redux - to manage state of the app
-
+/** App component containing all routes within the application  */
 const App: React.FC = () => {
   return (
     <div className="App">

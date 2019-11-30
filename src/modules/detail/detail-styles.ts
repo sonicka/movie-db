@@ -1,8 +1,15 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { primary, grey } from "../../constants";
+import { primary } from "../../constants";
 
+/** Props expected by useStyles hook */
+interface IWrapperStylesProps {
+  backgroundImage?: string;
+  contentMargin?: string;
+}
+
+/** Styles for Detail page */
 export const useStyles = makeStyles({
-  wrapperWrapper: (props: any) => ({
+  wrapperWrapper: (props: IWrapperStylesProps) => ({
     height: "100vh",
     width: "100vw",
     display: "flex",
@@ -31,7 +38,7 @@ export const useStyles = makeStyles({
     fontSize: "16pt",
     fontFamily: "Alatsi, Roboto, Helvetica Neue, sans-serif"
   },
-  content: (props: any) => ({
+  content: (props: IWrapperStylesProps) => ({
     background: "rgba(255,255,255,0.6)",
     boxShadow: "0px 0px 17px 1px black",
     borderRadius: "4px",
@@ -95,6 +102,7 @@ export const useStyles = makeStyles({
   },
   tagline: {
     color: "white",
+    textShadow: "0 0 5px black",
     fontStyle: "italic",
     fontSize: "22pt",
     paddingBottom: "30px",

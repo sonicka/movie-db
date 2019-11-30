@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "@reach/router";
+import { useDebouncedCallback } from "use-debounce";
 import { useMediaQuery } from "@material-ui/core";
 import SearchBar from "material-ui-search-bar";
-import { useDebouncedCallback } from "use-debounce";
 import Carousel from "../../components/carousel/carousel";
 import { search, clearSearch } from "../../actions/search-actions";
 import { removeDetail } from "../../actions/detail-actions";
 import { useStyles } from "./search-styles";
 
+/** Props expected  by Search component */
 interface ISearchProps extends RouteComponentProps {
   searchQuery: string;
   searchResults: any[];
 }
 
+/** Types of search data from Redux store */
 interface ISearchState extends RouteComponentProps {
   search: {
     query: string;
@@ -21,6 +23,7 @@ interface ISearchState extends RouteComponentProps {
   };
 }
 
+/** Component for searching through movies/tv shows */
 const Search: React.FC<ISearchProps & any> = ({
   searchQuery,
   searchResults,

@@ -1,6 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
 import { primary, grey } from "../../constants";
 
+/** Styles for Menu component */
 export const useStyles = makeStyles({
   toolbar: {
     backgroundColor: "black",

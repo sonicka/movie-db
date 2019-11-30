@@ -6,6 +6,7 @@ import { store } from "./store";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 
+/** Index page */
 ReactDOM.render(
   <Provider store={store}>
     <App />

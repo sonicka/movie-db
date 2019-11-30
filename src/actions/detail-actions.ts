@@ -8,6 +8,7 @@ import {
   CategoryType
 } from "../constants";
 
+/** Action that saves fetched detail of given movie/tv show to Redux store */
 export function saveDetail(type: CategoryType, id: number) {
   return async (dispatch: Dispatch<AnyAction>): Promise<void> => {
     dispatch({
@@ -32,16 +33,16 @@ export function saveDetail(type: CategoryType, id: number) {
         type: FETCH_DETAIL_FAILURE,
         payload: {
           id: id,
-          error: error.response,
-          lol: 595
+          error: error.response
         }
       });
     }
   };
 }
 
+/** Action that clears detail data from Redux store */
 export function removeDetail() {
-  return async (dispatch: Dispatch<AnyAction>): Promise<void> => {
+  return (dispatch: Dispatch<AnyAction>): void => {
     dispatch({
       type: REMOVE_DETAIL
     });

@@ -2,17 +2,18 @@ import { makeStyles } from "@material-ui/core/styles";
 
 /** Styles for Overview and OverviewGroup components */
 export const useStyles = makeStyles({
-  loaderWrapper: {
+  groupWrapper: {
+    paddingBottom: "8px"
+  },
+  noEntitiesWrapper: {
     width: "100%",
-    height: "185px",
+    height: "280px",
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+    justifyContent: "center"
   },
   overview: {
     paddingTop: "70px"
-  },
-  overviewGroup: {
-    paddingBottom: "8px"
   },
   overviewTitle: {
     color: "white"
@@ -20,6 +21,11 @@ export const useStyles = makeStyles({
   loading: {
     height: "338px",
     lineHeight: "338px"
+  },
+  error: {
+    color: "salmon",
+    fontStyle: "italic",
+    fontFamily: "Literata, Roboto, Helvetica Neue, sans-serif"
   },
   link: {
     width: "100%"
