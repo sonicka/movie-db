@@ -1,20 +1,19 @@
 import { makeStyles } from "@material-ui/core/styles";
+import { primary, grey } from "../../constants";
 
 export const useStyles = makeStyles({
   toolbar: {
-    backgroundColor: "red",
-    borderBottom: "1px solid white",
-    backgroundImage: "linear-gradient(salmon, red)"
+    backgroundColor: "black",
+    borderBottom: `2px solid ${primary}`
   },
   menuItem: {
     width: "50%",
     color: "white",
-    fontSize: "15pt",
-    fontWeight: 500,
-    fontFamily: "Catamaran, Roboto, Helvetica Neue, sans-serif",
+    fontSize: "18pt",
+    fontFamily: "Alatsi, Roboto, Helvetica Neue, sans-serif",
     "&:hover": {
       background: "none",
-      color: "#d6d6d6"
+      color: grey
     }
   }
 });

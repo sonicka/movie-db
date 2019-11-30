@@ -1,5 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
+import { primary, grey } from "../../constants";
 
+/** Styles for loader component */
 export const useStyles = makeStyles({
   "@keyframes spin": {
     "0%": {
@@ -10,8 +12,8 @@ export const useStyles = makeStyles({
     }
   },
   loader: {
-    border: "6px solid red",
-    borderTop: "6px solid #d6d6d6",
+    border: `6px solid ${primary}`,
+    borderTop: `6px solid ${grey}`,
     borderRadius: "50%",
     width: "30px",
     height: "30px",

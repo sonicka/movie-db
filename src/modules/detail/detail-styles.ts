@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
+import { primary, grey } from "../../constants";
 
 export const useStyles = makeStyles({
   wrapperWrapper: (props: any) => ({
@@ -11,8 +12,6 @@ export const useStyles = makeStyles({
     backgroundRepeat: "no-repeat",
     backgroundAttachment: "fixed",
     backgroundSize: "cover"
-    //paddingTop: props.topPadding,
-    //todo remove fixed position
   }),
   wrapper: {
     height: "100%",
@@ -25,29 +24,27 @@ export const useStyles = makeStyles({
     display: "flex",
     alignItems: "center"
   },
-  title: (props: any) => ({
-    marginTop: "80px",
+  title: {
+    padding: "60px 0 20px 0",
     color: "white",
-    position: "fixed",
     width: "100%",
-    fontFamily: "Catamaran, Roboto, Helvetica Neue, sans-serif",
-    height: "250px"
-    //top: props.topPadding
-  }),
+    fontSize: "16pt",
+    fontFamily: "Alatsi, Roboto, Helvetica Neue, sans-serif"
+  },
   content: (props: any) => ({
     background: "rgba(255,255,255,0.6)",
     boxShadow: "0px 0px 17px 1px black",
     borderRadius: "4px",
-    margin: `270px ${props.contentMargin} 20px ${props.contentMargin} `,
+    margin: `20px ${props.contentMargin} 20px ${props.contentMargin} `,
     padding: "20px"
   }),
   overviewWrapper: {
     height: "100%",
-    fontFamily: "Lora, Roboto, Helvetica Neue, sans-serif" // todo
+    fontFamily: "Literata, Roboto, Helvetica Neue, serif"
   },
   detailsWrapper: {
     height: "100%",
-    marginTop: "16px"
+    margin: "20px 0 10px 0"
   },
   detailItem: {
     display: "flex",
@@ -56,22 +53,24 @@ export const useStyles = makeStyles({
   },
   detailItemTitle: {
     paddingRight: "5px",
-    //fontWeight: "bold",
     width: "50%",
     textAlign: "end",
     fontWeight: 600,
-    fontFamily: "Catamaran, Roboto, Helvetica Neue, sans-serif" // todo
+    lineHeight: "16px",
+    fontFamily: "Alatsi, Roboto, Helvetica Neue, sans-serif"
   },
   detailItemText: {
     paddingLeft: "5px",
     width: "50%",
     textAlign: "start",
-    fontFamily: "Lora, Roboto, Helvetica Neue, sans-serif" // todo
+    lineHeight: "16px",
+    fontFamily: "Literata, Roboto, Helvetica Neue, serif"
   },
   genresWrapper: {
     display: "flex",
     justifyContent: "center",
-    padding: "5px 0"
+    fontFamily: "Alatsi, Roboto, Helvetica Neue, sans-serif",
+    padding: "16px 0"
   },
   genre: {
     background: "black",
@@ -87,8 +86,9 @@ export const useStyles = makeStyles({
     alignItems: "flex-end",
     justifyContent: "center",
     height: "100%",
+    paddingTop: "6px",
     fontWeight: 400,
-    fontFamily: "Catamaran, Roboto, Helvetica Neue, sans-serif" // todo
+    fontFamily: "Alatsi, Roboto, Helvetica Neue, sans-serif"
   },
   moreInfoIcons: {
     paddingTop: "5px"
@@ -96,7 +96,10 @@ export const useStyles = makeStyles({
   tagline: {
     color: "white",
     fontStyle: "italic",
-    fontFamily: "Lora, Roboto, Helvetica Neue, sans-serif" // todo
+    fontSize: "22pt",
+    paddingBottom: "30px",
+    margin: 0,
+    fontFamily: "Literata, Roboto, Helvetica Neue, serif"
   },
   buttonWrapper: {
     height: "100%",
@@ -108,13 +111,14 @@ export const useStyles = makeStyles({
     bottom: 0,
     width: "100%",
     height: "32px",
+    fontFamily: "Alatsi, Roboto, Helvetica Neue, sans-serif",
     backgroundColor: "black",
     color: "white",
     border: "none",
-    borderTop: "1px solid red",
+    borderTop: `1px solid ${primary}`,
     transition: "0.5s",
     "&:hover": {
-      backgroundColor: "red",
+      backgroundColor: primary,
       color: "white"
     }
   },

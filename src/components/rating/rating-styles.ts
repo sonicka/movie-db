@@ -1,5 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 
+/** Styles for Rating component */
 export const useStyles = makeStyles({
   progressbarNumber: {
     fontSize: 18,

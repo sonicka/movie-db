@@ -1,13 +1,14 @@
 import { AnyAction, Dispatch } from "redux";
-import { fetchDetail, CATEGORY } from "../fetchData";
+import { fetchDetail } from "../fetchData";
 import {
   FETCH_DETAIL_BEGIN,
   FETCH_DETAIL_SUCCESS,
   FETCH_DETAIL_FAILURE,
-  REMOVE_DETAIL
+  REMOVE_DETAIL,
+  CategoryType
 } from "../constants";
 
-export function saveDetail(type: CATEGORY, id: number) {
+export function saveDetail(type: CategoryType, id: number) {
   return async (dispatch: Dispatch<AnyAction>): Promise<void> => {
     dispatch({
       type: FETCH_DETAIL_BEGIN,

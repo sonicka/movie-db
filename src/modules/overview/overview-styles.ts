@@ -1,5 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 
+/** Styles for Overview and OverviewGroup components */
 export const useStyles = makeStyles({
   loaderWrapper: {
     width: "100%",
@@ -14,10 +15,7 @@ export const useStyles = makeStyles({
     paddingBottom: "8px"
   },
   overviewTitle: {
-    color: "white",
-    fontWeight: 300,
-    fontFamily: "Catamaran, Roboto, Helvetica Neue, sans-serif", // todo
-    paddingBottom: "4px"
+    color: "white"
   },
   loading: {
     height: "338px",

@@ -1,24 +1,19 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { get } from "lodash";
-import { store } from "../../store";
 import Carousel from "../../components/carousel/carousel";
 import Loader from "../../components/loader/loader";
-import { CATEGORY } from "../../fetchData";
-import { saveSomeData, IwhichData } from "../../actions/data-actions";
+import { CategoryType } from "../../constants";
+import { saveData } from "../../actions/data-actions";
 import { removeDetail } from "../../actions/detail-actions";
 import { clearSearch } from "../../actions/search-actions";
+import { DataType } from "../../constants";
 import { useStyles } from "./overview-styles";
-
-interface IMovie {
-  title: string;
-  src: string;
-}
 
 interface IOverviewGroupProps {
   groupTitle: string;
-  groupId: IwhichData;
-  category?: CATEGORY;
+  groupId: DataType;
+  category?: CategoryType;
   search: boolean;
 }
 
@@ -31,10 +26,10 @@ const OverviewGroup: React.FC<IOverviewGroupProps & any> = ({
   groupTitle,
   groupId,
   category,
+  state,
   ...props
 }) => {
   const classes = useStyles(props);
-  const state = store.getState().data;
   const loading = get(state, `${groupId}.loading`);
   const entities = get(state, `${groupId}.entities`, []);
   const error = get(state, `${groupId}.error`);
@@ -42,7 +37,7 @@ const OverviewGroup: React.FC<IOverviewGroupProps & any> = ({
   useEffect(() => {
     dispatch(removeDetail());
     dispatch(clearSearch());
-    dispatch(saveSomeData(groupId));
+    dispatch(saveData(groupId));
   }, [dispatch, groupId]);
 
   return (
@@ -63,7 +58,7 @@ const OverviewGroup: React.FC<IOverviewGroupProps & any> = ({
 };
 
 const mapStateToProps = (state: any) => ({
-  state: state.data // todo?
+  state: state.data
 });
 
 export default connect(mapStateToProps)(OverviewGroup);

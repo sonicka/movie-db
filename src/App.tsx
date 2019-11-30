@@ -5,7 +5,7 @@ import Overview from "./modules/overview/overview";
 import Detail from "./modules/detail/detail";
 import DetailVideo from "./modules/detail/detail-video";
 import Search from "./modules/search/search";
-import { useStyles } from "./app-styles";
+import "./App.css";
 
 // react-responsive - to manage responsiveness of the design
 // reach router - to handle routing between pages
@@ -13,9 +13,8 @@ import { useStyles } from "./app-styles";
 // redux - to manage state of the app
 
 const App: React.FC = () => {
-  const classes = useStyles();
   return (
-    <div className={classes.app}>
+    <div className="App">
       <Menu />
       <Router>
         <Overview path="/" />

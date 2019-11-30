@@ -2,30 +2,32 @@ import React from "react";
 import { RouteComponentProps } from "@reach/router";
 import OverviewGroup from "./overview-group";
 import { useStyles } from "./overview-styles";
+import { MovieGroups } from "../../constants";
 
-const Overview: React.FC<RouteComponentProps> = props => {
-  const classes = useStyles(props);
+/** Component consisting of all movie groups shown on homepage */
+const Overview: React.FC<RouteComponentProps> = () => {
+  const classes = useStyles();
 
   return (
     <div className={classes.overview}>
       <OverviewGroup
         groupTitle="Popular Movies"
-        groupId="popular_movies"
+        groupId={MovieGroups.POPULAR_MOVIES}
         category="movie"
       />
       <OverviewGroup
         groupTitle="Popular Series"
-        groupId="popular_series"
+        groupId={MovieGroups.POPULAR_SERIES}
         category="tv"
       />
       <OverviewGroup
         groupTitle="Family Movies"
-        groupId="family_movies"
+        groupId={MovieGroups.FAMILY_MOVIES}
         category="movie"
       />
       <OverviewGroup
         groupTitle="Documentaries"
-        groupId="documentaries"
+        groupId={MovieGroups.DOCUMENTARIES}
         category="movie"
       />
     </div>

@@ -1,8 +1,9 @@
 import React from "react";
 import { useStyles } from "./loader-styles";
 
-const Loader: React.FC = props => {
-  const classes = useStyles(props);
+/** Component shown when loading data */
+const Loader: React.FC = () => {
+  const classes = useStyles();
 
   return <div className={classes.loader}></div>;
 };

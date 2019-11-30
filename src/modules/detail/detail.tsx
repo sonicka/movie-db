@@ -9,6 +9,7 @@ import { useStyles } from "./detail-styles";
 import Loader from "../../components/loader/loader";
 import MovieDetail from "./detail-movie";
 import TvDetail from "./detail-tv";
+import { Category } from "../../constants";
 
 interface IDetailProps extends RouteComponentProps {
   titleId: number;
@@ -39,11 +40,6 @@ interface IDetailProps extends RouteComponentProps {
   loading: boolean;
 }
 
-enum Category {
-  MOVIE = "movie",
-  TV = "tv"
-}
-
 const Detail: React.FC<IDetailProps> = ({
   titleId,
   dispatch,
@@ -63,24 +59,18 @@ const Detail: React.FC<IDetailProps> = ({
     : null;
   const stylesProps = {
     backgroundImage: backgroundImage,
-    topPadding: isSmall ? "56px" : "64px",
     contentMargin: isLarge ? "200px" : "20px"
   };
   const classes = useStyles(stylesProps);
 
   const category = get(location, "state.category", "");
 
-  console.log("detail");
-  console.log(typeof detail.runtime);
-
   useEffect(() => {
     dispatch(saveDetail(category, titleId));
   }, [dispatch, titleId, category]);
 
-  const formattedTitle = (title: string = "", date: string = "") => {
-    console.log(title);
-    return title.concat(" (", date.substring(0, 4), ")");
-  };
+  const formattedTitle = (title: string = "", date: string = "") =>
+    title.concat(" (", date.substring(0, 4), ")");
 
   const formattedDate = (date: string = "") => {
     const options = { day: "numeric", month: "long", year: "numeric" };
@@ -115,9 +105,11 @@ const Detail: React.FC<IDetailProps> = ({
               homepage={detail.homepage}
               imdbId={detail.imdb_id}
             />
-            <Grid item xs={12}>
-              <h2 className={classes.tagline}>{`'${detail.tagline}'`}</h2>
-            </Grid>
+            {detail.tagline && (
+              <Grid item xs={12}>
+                <p className={classes.tagline}>{`'${detail.tagline}'`}</p>
+              </Grid>
+            )}
           </>
         )}
         {!loading && category === Category.TV && (

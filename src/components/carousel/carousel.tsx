@@ -3,14 +3,24 @@ import { Link } from "@reach/router";
 import { Fab } from "@material-ui/core";
 import ItemsCarousel from "react-items-carousel";
 import { useStyles } from "./carousel-styles";
-import { CATEGORY } from "../../fetchData";
+import { CategoryType } from "../../constants";
 
-interface ICarousel {
-  entities: any[];
-  category?: CATEGORY;
-  search: boolean;
+interface IEntity {
+  id: string;
+  name?: string;
+  title?: string;
+  poster_path: string;
+  media_type: string;
 }
 
+/** Props expected by Carousel component */
+interface ICarousel {
+  entities: IEntity[];
+  category?: CategoryType;
+  search?: boolean;
+}
+
+/** Hook to get current window width */
 function useWindowWidth() {
   const [width, setWidth] = useState(0);
   useLayoutEffect(() => {
@@ -24,7 +34,8 @@ function useWindowWidth() {
   return width;
 }
 
-const Carousel: React.FC<ICarousel & any> = ({
+/** Component showing lists of movies/tv shows */
+const Carousel: React.FC<ICarousel> = ({
   entities,
   category,
   search = false
@@ -63,7 +74,7 @@ const Carousel: React.FC<ICarousel & any> = ({
       }
       style={width < 400 ? { padding: "0 50%" } : {}}
     >
-      {entities.map((o: any) => (
+      {entities.map((o: IEntity) => (
         <div key={o.id} className={classes.imageContainer}>
           <img
             src={

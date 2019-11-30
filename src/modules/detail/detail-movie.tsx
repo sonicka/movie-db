@@ -1,6 +1,6 @@
 import React from "react";
 import { RouteComponentProps } from "@reach/router";
-import { Grid, IconButton, useMediaQuery } from "@material-ui/core";
+import { Grid, IconButton, Tooltip, useMediaQuery } from "@material-ui/core";
 import LanguageIcon from "@material-ui/icons/Language";
 import MovieIcon from "@material-ui/icons/Movie";
 import Rating from "../../components/rating/rating";
@@ -106,13 +106,17 @@ const MovieDetail: React.FC<IMovieDetailProps> = ({
           <div className={classes.moreInfoIcons}>
             <a href={homepage} target="_blank">
               <IconButton>
-                <LanguageIcon />
+                <Tooltip title="Website">
+                  <LanguageIcon />
+                </Tooltip>
               </IconButton>
             </a>
             {imdbId && (
               <a href={`https://www.imdb.com/title/${imdbId}`} target="_blank">
                 <IconButton>
-                  <MovieIcon />
+                  <Tooltip title="IMDb">
+                    <MovieIcon />
+                  </Tooltip>
                 </IconButton>
               </a>
             )}

@@ -1,59 +1,57 @@
 import { AnyAction, Dispatch } from "redux";
 import { fetchPopular, fetchFromGenre } from "../fetchData";
-import { FETCH_BEGIN, FETCH_SUCCESS, FETCH_FAILURE } from "../constants";
+import {
+  FETCH_BEGIN,
+  FETCH_SUCCESS,
+  FETCH_FAILURE,
+  Category,
+  MovieGroups,
+  DataType
+} from "../constants";
 
-export type IwhichData =
-  | "popular_movies"
-  | "popular_series"
-  | "family_movies"
-  | "documentaries";
-
-export function saveSomeData(whichData: IwhichData) {
+export function saveData(dataType: DataType) {
   return async (dispatch: Dispatch<AnyAction>): Promise<void> => {
     dispatch({
       type: FETCH_BEGIN,
       payload: {
-        id: whichData
+        id: dataType
       }
     });
+    console.log("dataType");
+    console.log(dataType);
     try {
       let response: any;
-      switch (whichData) {
-        case "popular_movies": {
-          response = await fetchPopular("movie");
+      switch (dataType) {
+        case MovieGroups.POPULAR_MOVIES: {
+          response = await fetchPopular(Category.MOVIE);
           break;
         }
-        case "popular_series": {
-          response = await fetchPopular("tv");
+        case MovieGroups.POPULAR_SERIES: {
+          response = await fetchPopular(Category.TV);
           break;
         }
-        case "family_movies": {
-          response = await fetchFromGenre("family");
-          break;
-        }
-        case "documentaries": {
-          response = await fetchFromGenre("documentary");
+        case MovieGroups.FAMILY_MOVIES:
+        case MovieGroups.DOCUMENTARIES: {
+          response = await fetchFromGenre(dataType);
           break;
         }
         default: {
-          throw new Error("Some weird shit just happened.");
+          throw new Error("Some weird shit just happened."); // todo
         }
       }
 
       dispatch({
         type: FETCH_SUCCESS,
         payload: {
-          id: whichData,
+          id: dataType,
           data: response
         }
       });
     } catch (error) {
-      console.log("error");
-      console.log(error);
       dispatch({
         type: FETCH_FAILURE,
         payload: {
-          id: whichData,
+          id: dataType,
           error: error.response
         }
       });
