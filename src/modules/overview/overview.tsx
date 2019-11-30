@@ -10,22 +10,22 @@ const Overview: React.FC<RouteComponentProps> = props => {
     <div className={classes.overview}>
       <OverviewGroup
         groupTitle="Popular Movies"
-        groupId={"popular_movies"}
+        groupId="popular_movies"
         category="movie"
       />
       <OverviewGroup
         groupTitle="Popular Series"
-        groupId={"popular_series"}
+        groupId="popular_series"
         category="tv"
       />
       <OverviewGroup
         groupTitle="Family Movies"
-        groupId={"family_movies"}
+        groupId="family_movies"
         category="movie"
       />
       <OverviewGroup
         groupTitle="Documentaries"
-        groupId={"documentaries"}
+        groupId="documentaries"
         category="movie"
       />
     </div>

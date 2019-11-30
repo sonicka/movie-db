@@ -1,11 +1,12 @@
 import axios from "axios";
 
-const apiKey = "f2725be090399a7f43df4c69b352f2f3";
+const apiKey = "f2725be090399a7f43df4c69b352f2f3"; // todo
 const baseUrl = "https://api.themoviedb.org";
 
 export type CATEGORY = "movie" | "tv";
 type GENRE = "family" | "documentary";
 
+//todo check actions
 export const fetchPopular = (category: CATEGORY): any => {
   return axios
     .get(`${baseUrl}/3/${category}/popular?api_key=${apiKey}`, {})

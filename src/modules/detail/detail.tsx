@@ -1,42 +1,65 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import { RouteComponentProps, Link } from "@reach/router";
 import { Grid, useMediaQuery } from "@material-ui/core";
 import { get } from "lodash";
-import format from "date-fns/format";
-import { CATEGORY } from "../../fetchData";
 import { saveDetail } from "../../actions/detail-actions";
 import { useStyles } from "./detail-styles";
+import Loader from "../../components/loader/loader";
+import MovieDetail from "./detail-movie";
+import TvDetail from "./detail-tv";
 
 interface IDetailProps extends RouteComponentProps {
-  titleId?: number; // todo remove ? after implementing video
+  titleId: number;
+  dispatch: Dispatch<any>;
+  detail: {
+    title: string;
+    release_date: string;
+    tagline: string;
+    overview: string;
+    runtime: string;
+    budget: number;
+    revenue: number;
+    genres: any[];
+    backdrop_path: string;
+    videos: [];
+    name: string;
+    vote_average: number;
+    vote_count: number;
+    first_air_date: string;
+    last_air_date: string;
+    number_of_episodes: number;
+    number_of_seasons: number;
+    episode_run_time: string;
+    original_language: string;
+    homepage: string;
+    imdb_id: string;
+  };
+  loading: boolean;
 }
 
-const Detail: React.FC<IDetailProps & any> = ({
+enum Category {
+  MOVIE = "movie",
+  TV = "tv"
+}
+
+const Detail: React.FC<IDetailProps> = ({
   titleId,
   dispatch,
-  category = "", // todo
-  title = "",
-  tagline = "",
-  releaseDate = "",
-  revenue = 0,
-  budget = 0,
-  runtime = 0,
-  overview = "",
-  genres = [],
-  backdrop_path = "",
-  videos = [],
-  ...props
+  location,
+  detail,
+  loading
 }) => {
-  const vid = `https://www.youtube.com/watch?v=${get(
-    videos,
+  const video = `https://www.youtube.com/watch?v=${get(
+    detail.videos,
     "results[0].key",
     ""
   )}`;
   const isSmall = useMediaQuery("(max-width:601px)");
   const isLarge = useMediaQuery("(min-width:1100px)"); // todo adjust
-  const backgroundImage = backdrop_path
-    ? `url(http://image.tmdb.org/t/p/w1280/${backdrop_path})`
+  const backgroundImage = detail.backdrop_path
+    ? `url(http://image.tmdb.org/t/p/w1280/${detail.backdrop_path})`
     : null;
   const stylesProps = {
     backgroundImage: backgroundImage,
@@ -45,131 +68,137 @@ const Detail: React.FC<IDetailProps & any> = ({
   };
   const classes = useStyles(stylesProps);
 
-  console.log(category);
+  const category = get(location, "state.category", "");
+
+  console.log("detail");
+  console.log(typeof detail.runtime);
 
   useEffect(() => {
-    dispatch(saveDetail(props.location.state.category, titleId)); // todo
-  }, [dispatch, titleId, props.location.state.category]);
+    dispatch(saveDetail(category, titleId));
+  }, [dispatch, titleId, category]);
 
-  const formattedTitle = (title: string, date: string) =>
-    title.concat(" (", date.substring(0, 4), ")");
-  const formattedRevenue = `$${revenue
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
-  const formattedBudget = `$${budget
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
-
-  const formattedDate = (date: string) => {
-    let parsed = date.split("-");
-    if (parsed.length > 0) {
-      return format(
-        new Date(
-          parseInt(parsed[0]),
-          parseInt(parsed[1]) - 1,
-          parseInt(parsed[2])
-        ),
-        "dd MMMM yyyy"
-      );
-    }
+  const formattedTitle = (title: string = "", date: string = "") => {
+    console.log(title);
+    return title.concat(" (", date.substring(0, 4), ")");
   };
 
-  // todo podla category upravit fieldy
+  const formattedDate = (date: string = "") => {
+    const options = { day: "numeric", month: "long", year: "numeric" };
+    if (date) {
+      return new Date(date).toLocaleDateString("en-EN", options);
+    }
+  };
 
   return (
     <div className={classes.wrapperWrapper}>
       <Grid container className={classes.wrapper}>
-        <Grid item xs={12} className={classes.title}>
-          <h1>{formattedTitle(title, releaseDate)}</h1>
-          <Grid item xs={12}>
-            <h2>{tagline}</h2>
-          </Grid>
-        </Grid>
-        <Grid container className={classes.content}>
-          <Grid item xs={12} md={6}>
-            <div className={classes.overviewWrapper}>
-              <p>{overview}</p>
-            </div>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <div className={classes.detailsWrapper}>
-              <div className={classes.detailItem}>
-                <div className={classes.detailItemTitle}>Released on</div>
-                <div className={classes.detailItemText}>
-                  {releaseDate.length > 0 && formattedDate(releaseDate)}
-                </div>
-              </div>
-              <div className={classes.detailItem}>
-                <div className={classes.detailItemTitle}>Runtime</div>
-                <div className={classes.detailItemText}>
-                  {`${runtime} minutes`}
-                </div>
-              </div>
-              <div className={classes.detailItem}>
-                <div className={classes.detailItemTitle}>Budget</div>
-                <div className={classes.detailItemText}>{formattedBudget}</div>
-              </div>
-              <div className={classes.detailItem}>
-                <div className={classes.detailItemTitle}>Revenue</div>
-                <div className={classes.detailItemText}>{formattedRevenue}</div>
-              </div>
-            </div>
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <div className={classes.genresWrapper}>
-              {genres.map((genre: any) => (
-                <div key={genre.id} className={classes.genre}>
-                  {genre.name}
-                </div>
-              ))}
-            </div>
-          </Grid>
-        </Grid>
+        {loading && (
+          <div className={classes.loaderWrapper}>
+            <Loader />
+          </div>
+        )}
+        }
+        {!loading && category === Category.MOVIE && (
+          <>
+            <MovieDetail
+              title={formattedTitle(detail.title, detail.release_date)}
+              tagline={detail.tagline}
+              overview={detail.overview}
+              releaseDate={formattedDate(detail.release_date) || ""}
+              runtime={detail.runtime}
+              budget={detail.budget}
+              revenue={detail.revenue}
+              genres={detail.genres}
+              originalLanguage={detail.original_language}
+              voteAverage={detail.vote_average}
+              voteCount={detail.vote_count}
+              homepage={detail.homepage}
+              imdbId={detail.imdb_id}
+            />
+            <Grid item xs={12}>
+              <h2 className={classes.tagline}>{`'${detail.tagline}'`}</h2>
+            </Grid>
+          </>
+        )}
+        {!loading && category === Category.TV && (
+          <TvDetail
+            title={formattedTitle(detail.name, detail.first_air_date)}
+            overview={detail.overview}
+            voteAverage={detail.vote_average}
+            voteCount={detail.vote_count}
+            firstAirDate={formattedDate(detail.first_air_date) || ""}
+            lastAirDate={formattedDate(detail.last_air_date) || ""}
+            numberOfEpisodes={detail.number_of_episodes}
+            numberOfSeasons={detail.number_of_seasons}
+            episodeRuntime={detail.episode_run_time}
+            originalLanguage={detail.original_language}
+            genres={detail.genres}
+            homepage={detail.homepage}
+          />
+        )}
         <Grid item xs={12}>
           <div className={classes.buttonWrapper}>
-            <Link to={`play/`} state={{ vid: vid, bgImage: backgroundImage }}>
+            <Link
+              to={`play/`}
+              state={{ video: video, posterUrl: backgroundImage }}
+            >
               <button className={classes.bottomButton}>PLAY MOVIE</button>
             </Link>
           </div>
         </Grid>
+        )}
       </Grid>
     </div>
   );
 };
 
+interface IMovieFields {
+  title: string;
+  tagline: string;
+  vote_average: number;
+  vote_count: number;
+  overview: string;
+  release_date: string;
+  runtime: number;
+  budget: string;
+  revenue: string;
+  original_language: string;
+  genres: any;
+  homepage: string;
+  imdb_id: string;
+  backdrop_path: string;
+  videos: { results: any[] };
+}
+
+interface ITvShowFields {
+  name: string;
+  vote_average: number;
+  vote_count: number;
+  overview: string;
+  first_air_date: string;
+  last_air_date: string;
+  number_of_episodes: number;
+  number_of_seasons: number;
+  episode_run_time: number;
+  original_language: string;
+  genres: any;
+  homepage: string;
+  backdrop_path: string;
+  videos: { results: any[] };
+}
+
 interface Istate {
-  // todo determine if movie or tv show
   detail: {
-    category: CATEGORY;
-    detailData: {
-      title: string;
-      tagline: string;
-      release_date: string;
-      revenue: string;
-      budget: string;
-      runtime: string;
-      overview: string;
-      genres: any;
-      backdrop_path: string;
-      videos: { results: any[] };
-    };
+    detailData: IMovieFields | ITvShowFields;
+    loading: boolean;
   };
-} // todo
+}
 
 const mapStateToProps = (state: Istate, ownProps: any) => {
   return {
     ...ownProps,
-    title: state.detail.detailData.title,
-    category: state.detail.category,
-    tagline: state.detail.detailData.tagline,
-    releaseDate: state.detail.detailData.release_date,
-    revenue: state.detail.detailData.revenue,
-    budget: state.detail.detailData.budget,
-    runtime: state.detail.detailData.runtime,
-    overview: state.detail.detailData.overview,
-    genres: state.detail.detailData.genres,
-    backdrop_path: state.detail.detailData.backdrop_path,
-    videos: state.detail.detailData.videos
+    detail: state.detail.detailData,
+    loading: state.detail.loading
   };
 };
 

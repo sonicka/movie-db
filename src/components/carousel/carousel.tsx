@@ -78,10 +78,16 @@ const Carousel: React.FC<ICarousel & any> = ({
             state={{ category: search ? o.media_type : category }}
           >
             <div className={classes.imageOverlay}>
-              <div className={classes.imageText}>
-                {search && o.media_type === "movie" ? o.title : o.name}
-                {!search && category === "movie" ? o.title : o.name}
-              </div>
+              {search && (
+                <div className={classes.imageText}>
+                  {o.media_type === "movie" ? o.title : o.name}
+                </div>
+              )}
+              {!search && (
+                <div className={classes.imageText}>
+                  {category === "movie" ? o.title : o.name}
+                </div>
+              )}
             </div>
           </Link>
         </div>

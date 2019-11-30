@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
+import { get } from "lodash";
 import shaka from "shaka-player";
 import muxjs from "mux.js";
-import { get } from "lodash";
+import { useStyles } from "./detail-styles";
 
 let manifestUri =
   "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8";
 
 const DetailVideo: React.FC<RouteComponentProps> = props => {
-  let videoUrl = get(props, "location.state.vid", "");
+  const classes = useStyles();
+  let videoUrl = get(props, "location.state.video", "");
   let posterUrl = get(props, "location.state.bgImage", "");
-  let video = React.createRef<HTMLVideoElement>(); // find the video element;
+  let video = React.createRef<HTMLVideoElement>();
   (window as any).muxjs = muxjs;
-  //(video as any).src = "https://www.youtube.com/watch?v=DYYtuKyMtY8";
-  //(video as any).load();
 
   useEffect(() => {
     // Construct a Player to wrap around the video element
@@ -28,39 +28,32 @@ const DetailVideo: React.FC<RouteComponentProps> = props => {
         });
 
         //   Try to load a manifest.
-        //   This is an asynchronous process.
         await player
           .load(manifestUri)
           .then(function() {
-            // This runs if the asynchronous load is successful.
+            if (video.current) {
+              video.current
+                .requestFullscreen()
+                .catch(err =>
+                  console.log(`Fullscreen cannot be toggled. ${err}`)
+                );
+            }
             console.log("The video has now been loaded!");
           })
           .catch((error: any) =>
             console.error("Error code", error.code, "object", error)
-          ); // onError is executed if the asynchronous load fails.
-        try {
-          await player.load(manifestUri);
-
-          // This runs if the asynchronous load is successful.
-          console.log("The video has now been loaded!");
-        } catch (error) {
-          console.log("érror here");
-          console.error("Error code", error.code, "object", error);
-        }
+          );
       }
     };
 
+    console.log("fullcnree");
     // Install built-in polyfills to patch browser incompatibilities.
     shaka.polyfill.installAll();
 
     // Check to see if the browser supports the basic APIs Shaka needs.
     if (shaka.Player.isBrowserSupported()) {
-      // Everything looks good!
-      console.log("gonna init");
       initPlayer();
     } else {
-      console.log("not gonna init");
-      // This browser does not have the minimum set of APIs we need.
       console.error("Browser not supported!");
     }
 
@@ -70,7 +63,7 @@ const DetailVideo: React.FC<RouteComponentProps> = props => {
   }, [video, videoUrl]);
 
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
+    <div className={classes.videoWrapper}>
       <video
         ref={video}
         width="100%"
@@ -79,9 +72,7 @@ const DetailVideo: React.FC<RouteComponentProps> = props => {
         controls
         autoPlay
         src={videoUrl}
-      >
-        <source src={videoUrl} />
-      </video>
+      />
     </div>
   );
 };

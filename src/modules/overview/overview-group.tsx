@@ -48,7 +48,11 @@ const OverviewGroup: React.FC<IOverviewGroupProps & any> = ({
   return (
     <div className={classes.overviewGroup}>
       <h3 className={classes.overviewTitle}>{groupTitle}</h3>
-      {loading && <Loader />}
+      {loading && (
+        <div className={classes.loaderWrapper}>
+          <Loader />
+        </div>
+      )}
       {!loading && !error && (
         <Carousel entities={entities} category={category} />
       )}

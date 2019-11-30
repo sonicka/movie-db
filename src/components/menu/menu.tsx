@@ -5,8 +5,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import { useStyles } from "./menu-styles";
 
-const Menu: React.FC = props => {
-  const classes = useStyles(props);
+const Menu: React.FC = () => {
+  const classes = useStyles();
 
   return (
     <AppBar position="fixed">
