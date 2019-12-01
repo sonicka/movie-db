@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { get } from "lodash";
 import Carousel from "../../components/carousel/carousel";
 import Loader from "../../components/loader/loader";
+import ErrorMessage from "../../components/error-message/error-message";
 import { saveData } from "../../actions/data-actions";
 import { removeDetail } from "../../actions/detail-actions";
 import { clearSearch } from "../../actions/search-actions";
@@ -44,8 +45,6 @@ const OverviewGroup: React.FC<IOverviewGroupProps & any> = ({
   const entities = get(groupData, "entities", []);
   const error = get(groupData, "error", false);
 
-  console.log(entities);
-
   useEffect(() => {
     dispatch(removeDetail());
     dispatch(clearSearch());
@@ -65,7 +64,7 @@ const OverviewGroup: React.FC<IOverviewGroupProps & any> = ({
       )}
       {error && (
         <div className={classes.noEntitiesWrapper}>
-          <h4 className={classes.error}>Error occured while loading data!</h4>
+          <ErrorMessage message="Error occurred while loading data!" />
         </div>
       )}
       {!loading && !error && !entities && (

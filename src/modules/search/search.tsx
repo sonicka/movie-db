@@ -5,7 +5,9 @@ import { useDebouncedCallback } from "use-debounce";
 import { useMediaQuery } from "@material-ui/core";
 import SearchBar from "material-ui-search-bar";
 import Carousel from "../../components/carousel/carousel";
-import { search, clearSearch } from "../../actions/search-actions";
+import Loader from "../../components/loader/loader";
+import ErrorMessage from "../../components/error-message/error-message";
+import { startSearch, search, clearSearch } from "../../actions/search-actions";
 import { removeDetail } from "../../actions/detail-actions";
 import { useStyles } from "./search-styles";
 
@@ -20,6 +22,8 @@ interface ISearchState extends RouteComponentProps {
   search: {
     query: string;
     results: any[];
+    loading: boolean;
+    error: any;
   };
 }
 
@@ -27,10 +31,12 @@ interface ISearchState extends RouteComponentProps {
 const Search: React.FC<ISearchProps & any> = ({
   searchQuery,
   searchResults,
+  loading,
+  error,
   dispatch
 }) => {
   const isSmall = useMediaQuery("(max-width:576px)");
-  const classes = useStyles({ marginTop: isSmall ? "100px" : "200px" });
+  const classes = useStyles({ marginTop: isSmall ? "150px" : "200px" });
   const [query, setSearchQuery] = useState(searchQuery);
 
   useEffect(() => {
@@ -42,6 +48,7 @@ const Search: React.FC<ISearchProps & any> = ({
   }, 1000);
 
   const handleChange = (value: string) => {
+    dispatch(startSearch());
     setSearchQuery(value);
     debouncedSearch(value);
     if (value.length === 0) {
@@ -56,7 +63,6 @@ const Search: React.FC<ISearchProps & any> = ({
 
   return (
     <div>
-      {/* todo fix the loader - show right after starting typing */}
       <SearchBar
         onChange={value => handleChange(value)}
         value={query}
@@ -64,8 +70,19 @@ const Search: React.FC<ISearchProps & any> = ({
         className={classes.searchBar}
         classes={{ root: classes.searchRoot, input: classes.searchInput }}
       />
-      <div className={classes.carouselWrapper}>
-        <Carousel search entities={searchResults} />
+      <div className={classes.sectionWrapper}>
+        {loading && (
+          <div className={classes.sectionWrapper}>
+            <Loader />
+          </div>
+        )}
+        {searchResults.length === 0 && searchQuery && (
+          <div className={classes.sectionWrapper}>
+            <ErrorMessage message="Nothing found" notification />
+          </div>
+        )}
+        {!loading && !error && <Carousel search entities={searchResults} />}
+        {error && <ErrorMessage message="Error occurred while loading data!" />}
       </div>
     </div>
   );
@@ -74,7 +91,9 @@ const Search: React.FC<ISearchProps & any> = ({
 const mapStateToProps = (state: ISearchState) => {
   return {
     searchQuery: state.search.query,
-    searchResults: state.search.results
+    searchResults: state.search.results,
+    loading: state.search.loading,
+    error: state.search.error
   };
 };
 

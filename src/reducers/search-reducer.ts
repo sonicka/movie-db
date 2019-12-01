@@ -25,7 +25,6 @@ export const searchReducer = (
     case actions.SEARCH_BEGIN:
       return {
         ...state,
-        query: action.payload.query,
         loading: true,
         error: null
       };
@@ -33,6 +32,7 @@ export const searchReducer = (
       return {
         ...state,
         loading: false,
+        query: action.payload.query,
         results: action.payload.results
       };
     case actions.SEARCH_FAILURE:

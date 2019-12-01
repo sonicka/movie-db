@@ -11,6 +11,7 @@ interface IWrapperStylesProps {
 export const useStyles = makeStyles({
   wrapperWrapper: (props: IWrapperStylesProps) => ({
     height: "100%",
+    minHeight: "100vh",
     width: "100vw",
     display: "flex",
     backgroundColor: "black",
@@ -23,16 +24,24 @@ export const useStyles = makeStyles({
   wrapper: {
     height: "100%",
     width: "100%",
-    backgroundImage: "linear-gradient(to top, transparent 15%, black 85%)"
+    backgroundImage: "linear-gradient(to top, transparent 15%, black 85%)",
+    marginBottom: "30px"
   },
   loaderWrapper: {
-    height: "100%",
+    height: "100vh",
     width: "100%",
     display: "flex",
     alignItems: "center"
   },
+  errorWrapper: {
+    height: "100vh",
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
   title: {
-    padding: "60px 0 20px 0",
+    padding: "80px 5px 20px 5px",
     color: "white",
     width: "100%",
     fontSize: "16pt",
@@ -105,7 +114,7 @@ export const useStyles = makeStyles({
     textShadow: "0 0 5px black",
     fontStyle: "italic",
     fontSize: "22pt",
-    paddingBottom: "30px",
+    paddingBottom: "50px",
     margin: 0,
     fontFamily: "Literata, Roboto, Helvetica Neue, serif"
   },

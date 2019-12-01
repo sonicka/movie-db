@@ -14,9 +14,11 @@ export const useStyles = makeStyles({
     marginTop: props.marginTop,
     backgroundColor: "black"
   }),
-  carouselWrapper: {
-    paddingTop: "100px"
+  sectionWrapper: {
+    paddingTop: "100px",
+    color: "white"
   },
+  errorWrapper: {},
   focused: {},
   searchRoot: {
     borderBottom: "2px solid white",

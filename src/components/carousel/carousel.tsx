@@ -45,9 +45,6 @@ const Carousel: React.FC<ICarousel> = ({
   const width = useWindowWidth();
   const classes = useStyles({ width: width });
 
-  console.log("entities in carousel");
-  console.log(entities);
-
   return (
     <ItemsCarousel
       infiniteLoop={true}

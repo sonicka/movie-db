@@ -22,11 +22,6 @@ export const useStyles = makeStyles({
     height: "338px",
     lineHeight: "338px"
   },
-  error: {
-    color: "salmon",
-    fontStyle: "italic",
-    fontFamily: "Literata, Roboto, Helvetica Neue, sans-serif"
-  },
   link: {
     width: "100%"
   }

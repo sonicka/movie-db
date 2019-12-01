@@ -7,21 +7,25 @@ import {
   CLEAR_SEARCH
 } from "../constants";
 
-/** Action that saves search data to Redux store */
+/** Action that sets search as running */
+export function startSearch() {
+  return (dispatch: Dispatch<AnyAction>): void => {
+    dispatch({
+      type: SEARCH_BEGIN
+    });
+  };
+}
+
+/** Action that saves search query and data to Redux store */
 export function search(query: string) {
   return async (dispatch: Dispatch<AnyAction>): Promise<void> => {
     if (query.length > 0) {
-      dispatch({
-        type: SEARCH_BEGIN,
-        payload: {
-          query: query
-        }
-      });
       try {
         let response: any = await searchMovies(query);
         dispatch({
           type: SEARCH_SUCCESS,
           payload: {
+            query: query,
             results: response
           }
         });

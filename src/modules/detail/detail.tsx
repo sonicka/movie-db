@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { RouteComponentProps, Link } from "@reach/router";
@@ -6,8 +6,10 @@ import { Grid } from "@material-ui/core";
 import { get } from "lodash";
 import { saveDetail } from "../../actions/detail-actions";
 import Loader from "../../components/loader/loader";
+import ErrorMessage from "../../components/error-message/error-message";
 import MovieDetail from "./detail-movie";
 import TvDetail from "./detail-tv";
+//import { initPlayer, video } from "./detail-video";
 import { useStyles } from "./detail-styles";
 import { Category } from "../../constants";
 
@@ -39,6 +41,7 @@ interface IDetailProps extends RouteComponentProps {
     imdb_id: string;
   };
   loading: boolean;
+  error: any;
 }
 
 /** Component that holds details of given movie/tv show */
@@ -47,7 +50,8 @@ const Detail: React.FC<IDetailProps> = ({
   dispatch,
   location,
   detail,
-  loading
+  loading,
+  error
 }) => {
   // const video = `https://www.youtube.com/watch?v=${get(
   //   detail.videos,
@@ -90,8 +94,12 @@ const Detail: React.FC<IDetailProps> = ({
             <Loader />
           </div>
         )}
-        }
-        {!loading && category === Category.MOVIE && (
+        {error && (
+          <div className={classes.errorWrapper}>
+            <ErrorMessage message="Error occurred while loading details!" />
+          </div>
+        )}
+        {!error && !loading && category === Category.MOVIE && (
           <>
             <MovieDetail
               title={formattedTitle(detail.title, detail.release_date)}
@@ -114,7 +122,7 @@ const Detail: React.FC<IDetailProps> = ({
             )}
           </>
         )}
-        {!loading && category === Category.TV && (
+        {!error && !loading && category === Category.TV && (
           <TvDetail
             title={formattedTitle(detail.name, detail.first_air_date)}
             overview={detail.overview}
@@ -139,11 +147,24 @@ const Detail: React.FC<IDetailProps> = ({
                 posterUrl: backgroundImage
               }}
             >
-              <button className={classes.bottomButton}>PLAY MOVIE</button>
+              <button
+                className={classes.bottomButton}
+                // onClick={() => {
+                //   if (video.current) {
+                //     initPlayer(video.current);
+                //     return video.current
+                //       .requestFullscreen()
+                //       .catch((err: any) =>
+                //         console.log(`Fullscreen cannot be toggled. ${err}`)
+                //       );
+                //   }
+                // }}
+              >
+                PLAY MOVIE
+              </button>
             </Link>
           </div>
         </Grid>
-        )}
       </Grid>
     </div>
   );
@@ -188,6 +209,7 @@ interface Istate {
   detail: {
     detailData: IMovieFields | ITvShowFields;
     loading: boolean;
+    error: any;
   };
 }
 
@@ -195,7 +217,8 @@ const mapStateToProps = (state: Istate, ownProps: any) => {
   return {
     ...ownProps,
     detail: state.detail.detailData,
-    loading: state.detail.loading
+    loading: state.detail.loading,
+    error: state.detail.error
   };
 };
 
