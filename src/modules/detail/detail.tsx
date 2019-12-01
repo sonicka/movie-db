@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import { RouteComponentProps, Link } from "@reach/router";
+import { RouteComponentProps } from "@reach/router";
 import { Grid } from "@material-ui/core";
 import { get } from "lodash";
 import { saveDetail } from "../../actions/detail-actions";
@@ -9,7 +9,7 @@ import Loader from "../../components/loader/loader";
 import ErrorMessage from "../../components/error-message/error-message";
 import MovieDetail from "./detail-movie";
 import TvDetail from "./detail-tv";
-//import { initPlayer, video } from "./detail-video";
+import { playVideo, enterFullscreen } from "./detail-video";
 import { useStyles } from "./detail-styles";
 import { Category } from "../../constants";
 
@@ -53,22 +53,27 @@ const Detail: React.FC<IDetailProps> = ({
   loading,
   error
 }) => {
-  // const video = `https://www.youtube.com/watch?v=${get(
+  // const videoUrl = `https://www.youtube.com/watch?v=${get(
   //   detail.videos,
   //   "results[0].key",
   //   ""
   // )}`;
 
+  const [showVideo, setShownVideo] = useState(false);
+  const video = React.createRef<HTMLVideoElement>();
+
   const backgroundImage = detail.backdrop_path
     ? `url(http://image.tmdb.org/t/p/w1280/${detail.backdrop_path})`
     : null;
-  let stylesProps = {};
+  let stylesProps = { showVideo: showVideo };
+  let stylesPropsWithBg = {};
   if (backgroundImage) {
-    stylesProps = {
+    stylesPropsWithBg = {
+      showVideo: showVideo,
       backgroundImage: backgroundImage
     };
   }
-  const classes = useStyles(stylesProps);
+  const classes = useStyles(backgroundImage ? stylesPropsWithBg : stylesProps);
 
   const category = get(location, "state.category", "");
 
@@ -99,7 +104,7 @@ const Detail: React.FC<IDetailProps> = ({
             <ErrorMessage message="Error occurred while loading details!" />
           </div>
         )}
-        {!error && !loading && category === Category.MOVIE && (
+        {!error && !loading && !showVideo && category === Category.MOVIE && (
           <>
             <MovieDetail
               title={formattedTitle(detail.title, detail.release_date)}
@@ -122,7 +127,7 @@ const Detail: React.FC<IDetailProps> = ({
             )}
           </>
         )}
-        {!error && !loading && category === Category.TV && (
+        {!error && !loading && !showVideo && category === Category.TV && (
           <TvDetail
             title={formattedTitle(detail.name, detail.first_air_date)}
             overview={detail.overview}
@@ -138,31 +143,39 @@ const Detail: React.FC<IDetailProps> = ({
             homepage={detail.homepage}
           />
         )}
+        <div className={classes.videoWrapper}>
+          <video
+            ref={video}
+            width="100%"
+            height="100%"
+            poster={`http://image.tmdb.org/t/p/w1280/${detail.backdrop_path}`}
+            controls
+            autoPlay
+            // src={videoUrl}
+          />
+        </div>
         <Grid item xs={12}>
           <div className={classes.buttonWrapper}>
-            <Link
-              to={`play/`}
-              state={{
-                //video: video,
-                posterUrl: backgroundImage
+            <button
+              className={classes.bottomButton}
+              onClick={() => {
+                if (showVideo) {
+                  setShownVideo(false);
+                  (window as any).player
+                    .destroy()
+                    .then(() => console.log("Player stopped."))
+                    .catch((err: any) =>
+                      console.log(`Unable to stop player. ${err})`)
+                    );
+                } else {
+                  setShownVideo(true);
+                  playVideo(video);
+                  enterFullscreen(video);
+                }
               }}
             >
-              <button
-                className={classes.bottomButton}
-                // onClick={() => {
-                //   if (video.current) {
-                //     initPlayer(video.current);
-                //     return video.current
-                //       .requestFullscreen()
-                //       .catch((err: any) =>
-                //         console.log(`Fullscreen cannot be toggled. ${err}`)
-                //       );
-                //   }
-                // }}
-              >
-                PLAY MOVIE
-              </button>
-            </Link>
+              {showVideo ? "BACK TO DETAIL" : "PLAY MOVIE"}
+            </button>
           </div>
         </Grid>
       </Grid>

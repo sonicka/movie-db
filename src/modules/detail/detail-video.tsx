@@ -1,122 +1,51 @@
-import React, { useEffect } from "react";
-import { RouteComponentProps } from "@reach/router";
+import { RefObject } from "react";
 import shaka from "shaka-player";
 import muxjs from "mux.js";
-import { get } from "lodash";
-import { useStyles } from "./detail-styles";
+import { manifestUri } from "../../constants";
 
-const manifestUri =
-  "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8";
-export const video = React.createRef<HTMLVideoElement>();
-
-/** Component that plays video using Shaka player */
-const DetailVideo: React.FC<RouteComponentProps> = props => {
-  const classes = useStyles({});
-  let videoUrl = get(props, "location.state.video", "");
-  let posterUrl = get(props, "location.state.bgImage", "");
+/** Function that creates video player usingg Shaka player */
+export const playVideo = (video: RefObject<HTMLVideoElement>) => {
   (window as any).muxjs = muxjs;
 
-  console.log(video);
+  // Construct a Player to wrap around the video element
+  let player = new shaka.Player(video.current);
 
-  useEffect(() => {
-    // Construct a Player to wrap around the video element
-    let player = new shaka.Player(video.current);
-    (window as any).player = player;
+  // Attach player to the window to make it easy to access
+  (window as any).player = player;
 
-    const initPlayer = async () => {
-      // Listen for error events.
-      if (player) {
-        player.addEventListener("error", function(event: any) {
-          console.log(event);
-        });
+  // Initialize video player after checking browser support
+  const initPlayer = async () => {
+    // Listen for error events.
+    if (player) {
+      player.addEventListener("error", function(event: any) {
+        console.log(event);
+      });
 
-        // Try to load a manifest.
-        await player
-          .load(manifestUri)
-          .then(function() {
-            if (video.current) {
-              video.current
-                .requestFullscreen()
-                .catch(err =>
-                  console.log(`Fullscreen cannot be toggled. ${err}`)
-                );
-            }
-            console.log("The video has now been loaded!");
-          })
-          .catch((error: any) =>
-            console.error("Error code", error.code, "object", error)
-          );
-      }
-    };
-
-    // Install built-in polyfills to patch browser incompatibilities.
-    shaka.polyfill.installAll();
-
-    // Check if the browser supports the basic APIs Shaka needs.
-    if (shaka.Player.isBrowserSupported()) {
-      initPlayer();
-    } else {
-      console.error("Browser not supported!");
+      // Try to load a manifest.
+      await player.load(manifestUri).catch((error: any) => {
+        console.error("Error code", error.code, "object", error);
+      });
     }
+  };
 
-    return () => {
-      player.destroy();
-    };
-  }, [video, videoUrl]);
+  // Install built-in polyfills to patch browser incompatibilities.
+  shaka.polyfill.installAll();
 
-  return (
-    <div className={classes.videoWrapper}>
-      <video
-        ref={video}
-        width="100%"
-        height="100%"
-        poster={posterUrl}
-        controls
-        autoPlay
-        src={videoUrl}
-      />
-    </div>
-  );
+  // Check if the browser supports the basic APIs Shaka needs.
+  if (shaka.Player.isBrowserSupported()) {
+    initPlayer();
+  } else {
+    console.error("Browser not supported!");
+  }
 };
 
-// export const initPlayer = async (video: any) => {
-//   (window as any).muxjs = muxjs;
-
-//   // Construct a Player to wrap around the video element
-//   let player = new shaka.Player(video.current);
-//   (window as any).player = player;
-
-//   // Install built-in polyfills to patch browser incompatibilities.
-//   shaka.polyfill.installAll();
-
-//   // Check if the browser supports the basic APIs Shaka needs.
-//   if (shaka.Player.isBrowserSupported()) {
-//     // Listen for error events.
-//     if (player) {
-//       player.addEventListener("error", function(event: any) {
-//         console.log(event);
-//       });
-
-//       // Try to load a manifest.
-//       await player
-//         .load(manifestUri)
-//         .then(function() {
-//           if (video.current) {
-//             video.current
-//               .requestFullscreen()
-//               .catch((err: any) =>
-//                 console.log(`Fullscreen cannot be toggled. ${err}`)
-//               );
-//           }
-//           console.log("The video has now been loaded! YASSS");
-//         })
-//         .catch((error: any) =>
-//           console.error("Error code", error.code, "object", error)
-//         );
-//     }
-//   } else {
-//     console.error("Browser not supported!");
-//   }
-// };
-
-export default DetailVideo;
+/** Function to play video on fullscreen */
+export const enterFullscreen = (video: RefObject<HTMLVideoElement>) => {
+  try {
+    if (video.current) {
+      video.current.requestFullscreen();
+    }
+  } catch (error) {
+    console.log(`Fullscreen cannot be toggled. ${error}`);
+  }
+};

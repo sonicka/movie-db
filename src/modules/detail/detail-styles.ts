@@ -5,6 +5,7 @@ import { primary } from "../../constants";
 interface IWrapperStylesProps {
   backgroundImage?: string;
   contentMargin?: string;
+  showVideo?: boolean;
 }
 
 /** Styles for Detail page */
@@ -139,8 +140,9 @@ export const useStyles = makeStyles({
       color: "white"
     }
   },
-  videoWrapper: {
-    width: "100vw",
-    height: "100vh"
-  }
+  videoWrapper: (props: IWrapperStylesProps) => ({
+    display: props.showVideo ? "block" : "none",
+    backgroundColor: "black",
+    height: "calc(100vh - 32px)"
+  })
 });

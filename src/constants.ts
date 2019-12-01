@@ -2,6 +2,10 @@
 export const apiKey = "f2725be090399a7f43df4c69b352f2f3";
 export const baseUrl = "https://api.themoviedb.org";
 
+// streams
+export const manifestUri =
+  "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8";
+
 // actions
 export const FETCH_BEGIN = "FETCH_BEGIN";
 export const FETCH_SUCCESS = "FETCH_SUCCESS";
