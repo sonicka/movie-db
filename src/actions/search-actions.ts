@@ -26,7 +26,7 @@ export function search(query: string) {
           type: SEARCH_SUCCESS,
           payload: {
             query: query,
-            results: response
+            results: response.filter((r: any) => r.media_type !== "person")
           }
         });
       } catch (error) {
