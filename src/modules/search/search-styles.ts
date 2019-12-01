@@ -17,8 +17,6 @@ export const useStyles = makeStyles({
     paddingTop: "100px",
     color: "white"
   },
-  errorWrapper: {},
-  focused: {},
   searchRoot: {
     borderBottom: "2px solid white",
     borderRadius: 0
